@@ -1,0 +1,28 @@
+#!/usr/bin/env php
+<?php
+/**
+ * SmartyLint processes Smarty file and detects violations of a
+ * defined set of coding standards.
+ *
+ * @package   SmartyLint
+ * @author    Greg Sherwood <gsherwood@squiz.net>
+ * @author    Marc McIntyre <mmcintyre@squiz.net>
+ * @author    Umakant Patil <me@umakantpatil.com>
+ * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
+ * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
+ * @link      http://smartylint.com
+ */
+
+error_reporting(E_ALL | E_STRICT);
+
+include_once dirname(__FILE__).'/SmartyLint/Cli.php';
+
+$smartylint = new SmartyLint_Cli();
+$smartylint->checkRequirements();
+
+$numErrors = $smartylint->process();
+if ($numErrors === 0) {
+    exit(0);
+} else {
+    exit(1);
+}

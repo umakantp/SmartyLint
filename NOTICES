@@ -1,0 +1,13 @@
+Code for SmartyLint was originally was taken from PHP CodeSniffer and modified.
+
+"LICENSE" file (without double quotes) in the distribution maintains copyright notice
+of original authors, with additional copyright notice of SmartyLint authors.
+
+Files which are used as it is(with no modification) still have copyright notice of
+their original authors. Files which are modified/changed/updated have new authors name
+and/or original auhors name. Files which are new have only new authors name.
+
+SmartyLint has nothing to do with "Squiz Pty Ltd" or its contributors.
+
+Thanks to "Squiz Pty Ltd", Greg Sherwood <gsherwood@squiz.net> and
+Marc McIntyre <mmcintyre@squiz.net> for creating awesome tool PHP CodeSniffer.
