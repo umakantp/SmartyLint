@@ -28,19 +28,7 @@ If you start using SmartyLint, it would force you to follow certain standards. C
 
 * Should have one empty line at the bottom.
 * Should not have more than 1 empty line at the bottom
-* You should write file doc comment at the top in Java Doc format which contains short file description and all the variables used. e.g.
-
-    {**
-     * File short description goes here.
-     *
-     * Long description can go here.
-     * Remember that long description is optional.
-     *
-     * @param string $userId Holds user id.
-     * @param string $name   Name of the user.
-     * @param string $eg     Short description of variable.
-     *}
-
+* You should write file doc comment at the top in Java Doc format which contains short file description and all the variables used.
 * File comment and content should have one blank line in between.
 * There should be no TODO's and FixMe's in the code.
 * Never use HTML comments. You should use Smarty comments {**} instead.
