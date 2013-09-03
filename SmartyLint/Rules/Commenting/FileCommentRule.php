@@ -12,7 +12,7 @@
  *  <li>A space is present before the first and after the last parameter.</li>
  *  <li>Short description must be on single line.</li>
  *  <li>Short description must end with a full stop.</li>
- *  <li>Mo space is present between any two parameters.</li>
+ *  <li>No space is present between any two parameters.</li>
  *  <li>There must be one blank line between body and headline comments.</li>
  * </ul>
  *

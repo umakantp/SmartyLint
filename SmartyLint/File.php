@@ -402,7 +402,7 @@ class SmartyLint_File {
                 $rule = $parts[1].'.'.$parts[2];
 
                 // Remove "Rule" from the end.
-                $rule = substr($rule, 0, -5);
+                $rule = substr($rule, 0, -4);
             } else {
                 $rule = 'unknownRule';
             }
