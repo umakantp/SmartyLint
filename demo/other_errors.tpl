@@ -1,6 +1,8 @@
 
 {**
- * Display's user information.
+ * display's user information
+ *
+ * long description of file goes here
  *
  * @param string $name     Name of user.
  * @param string $school  School name of user.

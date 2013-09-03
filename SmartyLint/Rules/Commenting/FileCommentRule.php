@@ -8,7 +8,10 @@
  *  <li>There is a blank newline after the short description.</li>
  *  <li>There is a blank newline between the long and short description.</li>
  *  <li>There is a blank newline between the long description and tags.</li>
+ *  <li>Long and short description should start with capital letters.</li>
  *  <li>A space is present before the first and after the last parameter.</li>
+ *  <li>Short description must be on single line.</li>
+ *  <li>Short description must end with a full stop.</li>
  *  <li>Mo space is present between any two parameters.</li>
  *  <li>There must be one blank line between body and headline comments.</li>
  * </ul>
@@ -112,6 +115,12 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             }
 
             $newlineCount += $newlineBetween;
+
+            $testLong = trim($long);
+            if (preg_match('|[A-Z]|', $testLong[0]) === 0) {
+                $error = 'File comment long description must start with a capital letter';
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + $newlineCount + 1)), 'LongNotCaptial');
+            }
         }
 
         // Exactly one blank line before tags.
@@ -127,6 +136,24 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
                 $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + $newlineCount)), 'SpacingBeforeTags');
                 $short = rtrim($short, $smartylFile->eolChar.' ');
             }
+        }
+
+        // Short description must be single line and end with a full stop.
+        $testShort = trim($short);
+        $lastChar  = $testShort[(strlen($testShort) - 1)];
+        if (substr_count($testShort, $smartylFile->eolChar) !== 0) {
+            $error = 'File comment short description must be on a single line';
+            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortSingleLine');
+        }
+
+        if (preg_match('|[A-Z]|', $testShort[0]) === 0) {
+            $error = 'File comment short description must start with a capital letter';
+            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortNotCapital');
+        }
+
+        if ($lastChar !== '.') {
+            $error = 'File comment short description must end with a full stop';
+            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortFullStop');
         }
     }
 
