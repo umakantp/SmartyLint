@@ -32,6 +32,8 @@ If you start using SmartyLint, it would force you to follow certain standards. C
 * File comment and content should have one blank line in between.
 * There should be no TODO's and FixMe's in the code.
 * Never use HTML comments. You should use Smarty comments {**} instead.
+* No whitespace / empty spaces at the end of each line.
+* Have max only 2 empty lines in the content (i.e. 3 new lines in a row).
 
 More conventions would be added as an when code is added for it.
 
