@@ -1,0 +1,37 @@
+
+List of TODO's:-
+
+1. Add following rules
+   * Don't use TAB. Use 4 spaces.
+   * Use unix line endings (\\n).
+   * Use periods in Smarty array variables ({$user.id}). Don't use brackets ({$user['id']})
+
+2. Improve Smarty Tokenizer code.
+3. Ability to disable any rule completely.
+4. Ability to disable any rule for selected file.
+5. Can exclude any folder/path.
+
+
+Rough plan for points 2:-
+
+It should tokenize tags just the way like it tokenzis comments, html comment, spaces, new line chars.
+It should tokenize smarty tags like {if}, {else}..etc
+And gradually add more rules like empty if, empty else, empty foreach are not allowed.
+
+
+
+Rough plan for points 3, 4 and 5:-
+
+User can pass any.xml to SmartyLint like the way we pass --files=
+e.g. php smartyl --files=/home/user/smarty_files --rules=<path to>any.xml
+
+any.xml will have format something like
+
+<ruleset>
+    <exclude path="*/test/*" />
+    <exclude rule="Files.EndFileNewline.TooMany" />
+    <exclude rule="Commenting.FileComment.ParameterNamesNotAligned">
+        <file>smarty_files/users/xyz.tpl</file>
+        <file>smarty_files/test/lmno.tpl</file>
+    <exclude>
+</ruleset>
