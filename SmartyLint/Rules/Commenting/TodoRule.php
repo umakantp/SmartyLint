@@ -60,7 +60,7 @@ class Rules_Commenting_TodoRule implements SmartyLint_Rule {
                 } else {
                     $l = $tokens[$stackPtr]['line'];
                 }
-                $smartylFile->addWarning($error, [$l, $cLine], $type, $data);
+                $smartylFile->addWarning($error, array($l, $cLine), $type, $data);
             }
             $cLine++;
         }

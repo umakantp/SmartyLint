@@ -62,7 +62,7 @@ class Rules_Commenting_FixmeRule implements SmartyLint_Rule {
                 } else {
                     $l = $tokens[$stackPtr]['line'];
                 }
-                $smartylFile->addError($error, [$l, $cLine], $type, $data);
+                $smartylFile->addError($error, array($l, $cLine), $type, $data);
             }
             $cLine++;
         }

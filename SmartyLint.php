@@ -605,7 +605,7 @@ class SmartyLint {
      */
     public function processFile($file, $contents=null) {
         if ($contents === null && file_exists($file) === false) {
-            throw new SmartyLint_File_Exception("Source file $file does not exist");
+            throw new SmartyLint_Exception("Source file $file does not exist");
         }
 
         $filePath = realpath($file);
