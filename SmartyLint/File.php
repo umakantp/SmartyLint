@@ -257,10 +257,30 @@ class SmartyLint_File {
             }
 
             foreach ($this->_listeners[$tokenType] as $listenerData) {
-                // Make sure this rule supports the tokenizer
-                // we are currently using.
                 $listener = $listenerData['listener'];
                 $class = $listenerData['class'];
+
+                // If the file path matches one of our ignore patterns, skip it.
+                $parts = explode('_', $class);
+                if (isset($parts[2]) === true) {
+                    $source = $parts[1].'.'.substr($parts[2], 0, -4);
+                    $patterns = $this->smartyl->getIgnorePatterns($source);
+                    foreach ($patterns as $pattern) {
+                        // While there is support for a type of each pattern
+                        // (absolute or relative) we don't actually support it here.
+                        $replacements = array(
+                                '\\,' => ',',
+                                '*'   => '.*',
+                            );
+
+                        $pattern = strtr($pattern, $replacements);
+                        if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                            continue(2);
+                        }
+                    }
+                }
+
+
 
                 $this->setActiveListener($class);
 
@@ -412,6 +432,26 @@ class SmartyLint_File {
             }
         }
 
+        // Make sure we are not ignoring this file.
+        $patterns = $this->smartyl->getIgnorePatterns($rule);
+        foreach ($patterns as $pattern) {
+            // While there is support for a type of each pattern
+            // (absolute or relative) we don't actually support it here.
+            $replacements = array(
+                    '\\,' => ',',
+                    '*'   => '.*',
+                );
+            $pattern = strtr($pattern, $replacements);
+            if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                return;
+            }
+        }
+
+        // Make sure this rule is globally disabled.
+        if ($this->smartyl->getIgnoreRules($rule)) {
+            return;
+        }
+
         $this->_errorCount++;
         if ($this->_recordErrors === false) {
             return;
@@ -481,6 +521,27 @@ class SmartyLint_File {
             if ($code !== '') {
                 $rule .= '.'.$code;
             }
+        }
+
+        // Make sure we are not ignoring this file.
+        $patterns = $this->smartyl->getIgnorePatterns($rule);
+        foreach ($patterns as $pattern) {
+            // While there is support for a type of each pattern
+            // (absolute or relative) we don't actually support it here.
+            $replacements = array(
+                             '\\,' => ',',
+                             '*'   => '.*',
+                            );
+
+            $pattern = strtr($pattern, $replacements);
+            if (preg_match("|{$pattern}|i", $this->_file) === 1) {
+                return;
+            }
+        }
+
+        // Make sure this rule is globally disabled.
+        if ($this->smartyl->getIgnoreRules($rule)) {
+            return;
         }
 
         $this->_warningCount++;

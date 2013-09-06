@@ -28,8 +28,8 @@ class SmartyLint_CLI {
      */
     public function checkRequirements() {
         // Check the PHP version.
-        if (version_compare(PHP_VERSION, '5.1.2') === -1) {
-            echo 'ERROR: SmartyLint requires PHP version 5.1.2 or greater.'.PHP_EOL;
+        if (version_compare(PHP_VERSION, '5.2.4') === -1) {
+            echo 'ERROR: SmartyLint requires PHP version 5.2.4 or greater.'.PHP_EOL;
             exit(2);
         }
     }
@@ -46,6 +46,7 @@ class SmartyLint_CLI {
         $defaults['startDelimiter'] = "{";
         $defaults['endDelimiter'] = "}";
         $defaults['showProgress'] = false;
+        $defaults['ignoreRules'] = null;
 
         return $defaults;
     }
@@ -73,6 +74,7 @@ class SmartyLint_CLI {
                     // Empty argument, ignore it.
                     continue;
                 }
+
 
                 if ($arg{1} === '-') {
                     $values
@@ -139,6 +141,7 @@ class SmartyLint_CLI {
      * @see getCommandLineValues()
      */
     public function processLongArgument($arg, $pos, $values) {
+
         switch ($arg) {
             case 'help':
                 $this->printUsage();
@@ -154,14 +157,15 @@ class SmartyLint_CLI {
                     $values['extensions'] = explode(',', substr($arg, 11));
                 } else if (substr($arg, 0, 6) === 'files=') {
                     $values['files'] = explode(',', substr($arg, 6));
-                } else if (substr($arg, 0, 16) === 'start-delimiter=') {
-                    $values['startDelimiter'] = explode(',', substr($arg, 16));
-                } else if (substr($arg, 0, 14) === 'end-delimiter=') {
-                    $values['endDelimiter'] = explode(',', substr($arg, 14));
+                } else if (substr($arg, 0, 17) === 'start-delimiter=') {
+                    $values['startDelimiter'] = substr($arg, 17);
+                } else if (substr($arg, 0, 15) === 'end-delimiter=') {
+                    $values['endDelimiter'] = substr($arg, 15);
+                } else if (substr($arg, 0, 13) === 'ignore-rules=') {
+                    $values['ignoreRules'] = substr($arg, 13);
                 }
                 break;
         }
-
         return $values;
     }
 
@@ -195,7 +199,10 @@ class SmartyLint_CLI {
 
         $lint->setCli($this);
 
-        $lint->process($values['files']);
+        $lint->process(
+            $values['files'],
+            $values['ignoreRules']
+        );
 
         return $this->printErrorReport($lint);
     }
@@ -224,14 +231,17 @@ class SmartyLint_CLI {
     public function printUsage() {
         echo 'Usage: smartyl --files=<files> [--extensions=<extensions>]'.PHP_EOL;
         echo '    [--start-delimiter=<delimiter>] [--end-delimiter=<delimiter>]'.PHP_EOL;
-        echo '        -p            Show progress of the run'.PHP_EOL;
-        echo '        -h            Print this help message'.PHP_EOL;
-        echo '        -v            Print version information'.PHP_EOL;
-        echo '        --help        Print this help message'.PHP_EOL;
-        echo '        --version     Print version information'.PHP_EOL;
-        echo '        <file>        One or more files and/or directories to check'.PHP_EOL;
-        echo '        <extensions>  A comma separated list of file extensions to check'.PHP_EOL;
-        echo '                      (only valid if checking a directory)'.PHP_EOL;
-        echo '        <delimiter>   Delimiter used in smarty files.'.PHP_EOL.PHP_EOL;
+        echo '    [--ignore-rules=<rules>]'.PHP_EOL;
+        echo '        -p                Show progress of the run'.PHP_EOL;
+        echo '        -h                Print this help message'.PHP_EOL;
+        echo '        -v                Print version information'.PHP_EOL;
+        echo '        --help            Print this help message'.PHP_EOL;
+        echo '        --version         Print version information'.PHP_EOL;
+        echo '        <files>           One or more files and/or directories to check'.PHP_EOL;
+        echo '        <extensions>      A comma separated list of file extensions to check'.PHP_EOL;
+        echo '                          (only valid if checking a directory)'.PHP_EOL;
+        echo '        <delimiter>       Delimiter used in smarty files.'.PHP_EOL.PHP_EOL;
+        echo '        <rules>           Path to xml rule file which defines if any files are to'.PHP_EOL;
+        echo '                          be excluded or any rule is to be turned off.'.PHP_EOL.PHP_EOL;
     }
 }

@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<rules>
+    <ignore>
+        <!-- Ignoring "sample-pattern" folder from checking. -->
+        <pattern>*/sample-pattern/*</pattern>
+
+        <!-- Disabling complete rule set. -->
+        <rule name="Commenting.FileComment"/>
+
+        <!-- Disabling complete single rule. -->
+        <rule name="Files.EndFileNewline.TooMany"/>
+
+        <!-- Disabling complete rule set for selected pattern. -->
+        <rule name="Commenting.Todo">
+            <pattern>other_errors.tpl</pattern>
+        </rule>
+
+        <!-- Disabling single rule for selected pattern. -->
+        <rule name="Commenting.Fixme.TaskFound">
+            <pattern>other_errors.tpl</pattern>
+        </rule>
+    </ignore>
+</rules>

@@ -1,0 +1,39 @@
+
+v 0.1.2 (Currently in development):-
+
+1. Progress shown while files are scanned is turned off by default.
+   Need pass short argument "-p" to see progress.
+2. Can disable rule for all files.
+3. Can disable rule for selected files.
+4. Can exclude folders/files/patterns from the folder being scanned.
+5. Sample file sample.ignorerules.xml is available for points 2, 3 and 4
+7. You can pass ignore rules using long argument "--ignore-rules=<path to ignorerules.xml>"
+8. Added this (CHANGE_LOG) file.
+
+===========================================================================
+
+v 0.1.1 (Fri, 05 Sept 2013):-
+
+Quick fix release which adds
+1. support for PHP backword compatibility.
+2. Minor bug fixes.
+
+===========================================================================
+
+v 0.1 (Fri, 03 Sept 2013):-
+
+Basic version derived from PHP CodeSniffer which checks for following conventions
+
+1. Should have one empty line at the bottom.
+2. Should not have more than 1 empty line at the bottom
+3. You should write file doc comment at the top in Java Doc format which contains short file description and all the variables used.
+4. File comment and content should have one blank line in between.
+5. There should be no TODO's and FixMe's in the code.
+6. Never use HTML comments. You should use Smarty comments {**} instead.
+7. No whitespace / empty spaces at the end of each line.
+8. Have max only 2 empty lines in the content (i.e. 3 new lines in a row).
+
+"php smartyl -h" would show you all available options.
+
+===========================================================================
+

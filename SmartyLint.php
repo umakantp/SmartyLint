@@ -88,7 +88,6 @@ class SmartyLint {
      */
     protected $listeners = array();
 
-
     /**
      * The listeners array, indexed by token type.
      *
@@ -98,6 +97,20 @@ class SmartyLint {
                                 'file'      => array(),
                                 'multifile' => array(),
                                );
+
+    /**
+     * An array of rules to be skipped or disable these rules completely.
+     *
+     * @var array
+     */
+    protected $ignoreRules = array();
+
+    /**
+     * An array of patterns to use for skipping files.
+     *
+     * @var array
+     */
+    protected $ignorePatterns = array();
 
     /**
      * An array of extensions for files we will check.
@@ -119,21 +132,6 @@ class SmartyLint {
      * @var string
      */
     public $startDelimiter = '{';
-
-    /**
-     * An array of variable types for param/var we will check.
-     *
-     * @var array(string)
-     */
-    public static $allowedTypes = array(
-                                   'array',
-                                   'boolean',
-                                   'float',
-                                   'integer',
-                                   'mixed',
-                                   'object',
-                                   'string',
-                                  );
 
     /**
      * Constructs a SmartyLint object.
@@ -182,6 +180,75 @@ class SmartyLint {
      */
     public function setAllowedFileExtensions(array $extensions) {
         $this->allowedFileExtensions = $extensions;
+    }
+
+
+    /**
+     * Sets an array of ignore patterns that we use to skip files and folders.
+     *
+     * Patterns are not case sensitive.
+     *
+     * @param array $patterns An array of ignore patterns.
+     *
+     * @return void
+     */
+    public function setIgnoreRules(array $rules) {
+        $this->ignoreRules = $rules;
+    }
+
+    /**
+     * Gets the array of ignored rules or returns if listener is present in array.
+     *
+     * Optionally takes a listener to get ignore rules specified
+     * for that rule only.
+     *
+     * @param string $listener The listener to get rules for. If NULL, all
+     *                         rules are returned.
+     *
+     * @return boolean
+     */
+    public function getIgnoreRules($listener=null) {
+        if ($listener === null) {
+            return $this->ignoreRules;
+        }
+
+        return in_array($listener, $this->ignoreRules);
+    }
+
+    /**
+     * Sets an array of ignore patterns that we use to skip files and folders.
+     *
+     * Patterns are not case sensitive.
+     *
+     * @param array $patterns An array of ignore patterns.
+     *
+     * @return void
+     */
+    public function setIgnorePatterns(array $patterns) {
+        $this->ignorePatterns = $patterns;
+    }
+
+    /**
+     * Gets the array of ignore patterns.
+     *
+     * Optionally takes a listener to get ignore patterns specified
+     * for that sniff only.
+     *
+     * @param string $listener The listener to get patterns for. If NULL, all
+     *                         patterns are returned.
+     *
+     * @return array
+     */
+    public function getIgnorePatterns($listener=null) {
+        if ($listener === null) {
+            return $this->ignorePatterns;
+        }
+
+        if (isset($this->ignorePatterns[$listener]) === true) {
+            return $this->ignorePatterns[$listener];
+        }
+
+        return array();
     }
 
     /**
@@ -233,14 +300,14 @@ class SmartyLint {
     /**
      * Processes the files/directories that SmartyLint was constructed with.
      *
-     * @param string|array $files The files and directories to process. For
-     *                            directories, each sub directory will also
-     *                            be traversed for source files.
+     * @param string|array $files       The files and directories to process. For
+     *                                  directories, each sub directory will also
+     *                                  be traversed for source files.
+     * @param string       $ignoreRules Ruleset file which defines which file and rule to exclude.
      *
      * @return void
-     * @throws SmartyLint_Exception If files or standard are invalid.
      */
-    public function process($files) {
+    public function process($files, $ignoreRules = null) {
         if (is_array($files) === false) {
             if (is_string($files) === false || $files === null) {
                 throw new SmartyLint_Exception('$file must be a string');
@@ -261,7 +328,8 @@ class SmartyLint {
         // be detected properly for files created on a Mac with the /r line ending.
         ini_set('auto_detect_line_endings', true);
 
-        $this->setTokenListeners();
+        $this->setTokenListeners($ignoreRules);
+        $this->populateRules($ignoreRules);
         $this->populateTokenListeners();
 
         if (empty($files) === true) {
@@ -285,13 +353,13 @@ class SmartyLint {
             if ($lastDir !== $currDir) {
                 $lastDir = $currDir;
             }
-            $lintFile  = $this->processFile($file);
+            $lintFile = $this->processFile($file);
             $numProcessed++;
 
             // Show progress information.
-            if ($lintFile === null) {
+            if ($lintFile === null && $showProgress) {
                 echo 'S';
-            } else {
+            } else if ($showProgress) {
                 $errors   = $lintFile->getErrorCount();
                 $warnings = $lintFile->getWarningCount();
                 if ($errors > 0) {
@@ -338,20 +406,28 @@ class SmartyLint {
     }
 
     /**
-     * Sets installed rules in the coding standard being used.
+     * Sets rules in the coding standard being used.
      *
-     * Traverses the standard directory for classes that implement the
-     * SmartyLint_Rule interface asks them to register. Each of the
-     * rule's class names must be exact as the basename of the rule file.
-     * If the standard is a file, will skip transversal and just load rules
-     * from the file.
+     * @param string $ignoreRules Path to a custom ruleset to ignore rule or file.
      *
      * @return void
+     * @throws SmartyLint_Exception If the ignore ruleset is not valid.
      */
-    public function setTokenListeners() {
+    public function setTokenListeners($ignoreRules) {
+        $ruleset = null;
+        if ($ignoreRules != null && is_file($ignoreRules) === true) {
+            // This is ignore files or rule ruleset file.
+            $ruleset = simplexml_load_file($ignoreRules);
+            if ($ruleset === false) {
+                throw new SmartyLint_Exception("Ignore ruleset $ignoreRules is not valid");
+            }
+        } else if ($ignoreRules) {
+            throw new SmartyLint_Exception("No such file. $ignoreRules ");
+        }
+
         self::$rulesDir = realpath(dirname(__FILE__).'/SmartyLint/Rules');
 
-        $files = $this->getRuleFiles(self::$rulesDir);
+        $files = $this->getRuleFiles(self::$rulesDir, $ruleset);
 
         $listeners = array();
 
@@ -394,12 +470,15 @@ class SmartyLint {
      * Rules are found by recursing the standard directory and also by
      * asking the standard for included rules.
      *
-     * @param string $dir      The directory where to look for the files.
+     * @param string $dir   The directory where to look for the files.
+     * @param string $rules The name of the coding standard. If NULL, no
+     *                      included rules will be checked for.
      *
      * @return array
      */
-    public function getRuleFiles($dir) {
-        $includedRules = array();
+    public function getRuleFiles($dir, $rules) {
+        $ownRules = array();
+        $excludedRules = array();
 
         if (is_dir($dir) === true) {
             $di = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
@@ -423,11 +502,104 @@ class SmartyLint {
                 }
 
 
-                $includedRules[] = $file->getPathname();
+                $ownRules[] = $file->getPathname();
             }
         }
 
-        return $includedRules;
+        $this->ignoreRules = array();
+        if ($rules !== null) {
+            foreach ($rules->ignore->rule as $rule) {
+                // Get all rules which are globally disabled.
+                if (isset($rule->pattern) !== true) {
+                    $excludedRules[] = $this->_expandRuleToFile($rule['name']);
+                    $this->ignoreRules[] = $rule['name'];
+                }
+            }
+        }
+
+        $ownRules = array_unique($ownRules);
+        $excludedRules = array_unique($excludedRules);
+
+        // Filter out any excluded rules.
+        $files = array();
+        foreach ($ownRules as $rule) {
+            if (in_array($rule, $excludedRules) === true) {
+                continue;
+            } else {
+                $files[] = realpath($rule);
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Expand a rulname to get rule file.
+     *
+     * @param string $rule The rule reference from the ruleset.xml file.
+     *
+     * @return string|boolean
+     * @throws SmartyLint_Exception If the rule reference is invalid.
+     */
+    private function _expandRuleToFile($rule) {
+        // Ignore internal sniffs as they are used to only
+        // hide and change internal messages.
+        if (substr($rule, 0, 9) === 'Internal.') {
+            return false;
+        }
+
+        // Work out the rule path.
+        $parts = explode('.', $rule);
+        if (count($parts) < 2) {
+            $error = "Referenced rule $sniff does not exist";
+            throw new SmartyLint_Exception($error);
+        }
+        $path = 'Rules/'.$parts[0];
+        for ($j = 1; $j < count($parts); $j++) {
+            $path .= '/'.$parts[$j];
+        }
+        $path .= 'Rule.php';
+
+        $path = realpath(dirname(__FILE__).'/SmartyLint/'.$path);
+
+        return $path;
+    }
+
+    /**
+     * Populate ignore rules which are rule specific and global
+     *
+     * @param string $rules XmlObject containing defined rules set.
+     *
+     * @return void
+     */
+    public function populateRules($rules) {
+        if ($rules != null && !is_file($rules)) {
+            throw new Smarty_Exception('Rules file is not present.');
+        }
+        if ($rules === null) {
+            return;
+        }
+        $ruleset = simplexml_load_file($rules);
+        foreach ($ruleset->ignore->rule as $rule) {
+            $code = (string) $rule['name'];
+            // Ignore patterns.
+            foreach ($rule->pattern as $pattern) {
+                if (isset($this->ignorePatterns[$code]) === false) {
+                    $this->ignorePatterns[$code] = array();
+                }
+                $this->ignorePatterns[$code][] = (string) $pattern;
+            }
+        }
+
+        $this->ignorePatterns['global'] = array();
+        if (is_string($ruleset->ignore->pattern)) {
+            $this->ignorePatterns['global'][] = $ruleset['pattern'];
+        } else {
+            // Process custom ignore pattern rules.
+            foreach ($ruleset->ignore->pattern as $pattern) {
+                $this->ignorePatterns['global'][] = (string) $pattern;
+            }
+        }
     }
 
     /**
@@ -585,6 +757,35 @@ class SmartyLint {
      * @return bool
      */
     public function shouldIgnoreFile($path, $basedir) {
+        $relativePath = $path;
+        if (strpos($path, $basedir) === 0) {
+            // The +1 cuts off the directory separator as well.
+            $relativePath = substr($path, (strlen($basedir) + 1));
+        }
+
+        if (!isset($this->ignorePatterns['global'])) {
+            return false;
+        }
+
+        foreach ($this->ignorePatterns['global'] as $pattern) {
+            $replacements = array(
+                    '\\,' => ',',
+                    '*'   => '.*',
+                );
+
+            // We assume a / directory seperator, as do the exclude rules
+            // most developers write, so we need a special case for any system
+            // that is different.
+            if (DIRECTORY_SEPARATOR === '\\') {
+                $replacements['/'] = '\\\\';
+            }
+
+            $pattern = strtr($pattern, $replacements);
+
+            if (preg_match("|{$pattern}|i", $path) === 1) {
+                return true;
+            }
+        }
         return false;
     }
 
