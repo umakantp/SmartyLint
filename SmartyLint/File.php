@@ -317,7 +317,7 @@ class SmartyLint_File {
             return;
         }
 
-        $tokenizer = new SmartyLint_Tokenizers_Smarty();
+        $tokenizer = new SmartyLint_Tokenizer_Smarty();
 
         if ($contents === null) {
             $contents = file_get_contents($this->_file);
