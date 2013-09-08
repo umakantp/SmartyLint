@@ -172,14 +172,14 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
 
             $lastParm = (count($params) - 1);
             if (substr_count($params[$lastParm]->getWhitespaceAfter(), $this->currentFile->eolChar) !== 2) {
-                $error    = 'Last parameter comment requires a blank newline after it';
+                $error  = 'Last parameter comment has a blank newline after it';
                 $errorPos = ($params[$lastParm]->getLine() + $commentStart);
                 $this->currentFile->addError($error, array(0, $errorPos), 'SpacingAfterParams');
             }
 
             // Parameters must appear immediately after the comment.
             if ($params[0]->getOrder() !== 2) {
-                $error    = 'Parameters must appear immediately after the comment';
+                $error  = 'Parameters must appear immediately after the comment';
                 $errorPos = ($params[0]->getLine() + $commentStart);
                 $this->currentFile->addError($error, array(0, $errorPos), 'SpacingBeforeParams');
             }

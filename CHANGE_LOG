@@ -1,14 +1,18 @@
 
-v 0.1.2 (Currently in development):-
+v 0.1.2 (Sun, 08 Sept 2013):-
 
-1. Progress shown while files are scanned is turned off by default.
-   Need pass short argument "-p" to see progress.
-2. Can disable rule for all files.
-3. Can disable rule for selected files.
-4. Can exclude folders/files/patterns from the folder being scanned.
-5. Sample file sample.ignorerules.xml is available for points 2, 3 and 4
-7. You can pass ignore rules using long argument "--ignore-rules=<path to ignorerules.xml>"
-8. Added this (CHANGE_LOG) file.
+1.  Progress shown while files are scanned is turned off by default.
+    Need pass short argument "-p" to see progress.
+2.  Can disable rule for all files.
+3.  Can disable rule for selected files.
+4.  Can exclude folders/files/patterns from the folder being scanned.
+5.  Sample file sample.ignorerules.xml is available for points 2, 3 and 4
+7.  You can pass ignore rules using long argument "--ignore-rules=<path to ignorerules.xml>"
+8.  Improve tokenizer to handle new line characters in a better way.
+9.  Folder Tokenizers is renamed to Tokenizer because we have one tokenizer and which
+    pointed to remove 's' from the folder.
+10. TODO and FIXME are also checked inside HTML Comments.
+11. Added this (CHANGE_LOG) file.
 
 ===========================================================================
 

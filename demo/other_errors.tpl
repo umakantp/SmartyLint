@@ -10,7 +10,7 @@
  *}
 Name : {$name} <br>
 Company : SmartyLint <br>
-School : {$school} <br>
+School : {$school} <br> 
 
 
 

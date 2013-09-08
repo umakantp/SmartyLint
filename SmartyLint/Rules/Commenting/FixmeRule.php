@@ -18,7 +18,7 @@ class Rules_Commenting_FixmeRule implements SmartyLint_Rule {
      * @return array
      */
     public function register() {
-        return array('COMMENT', 'DOC_COMMENT');
+        return array('COMMENT', 'DOC_COMMENT', 'HTML_COMMENT');
     }
 
     /**
