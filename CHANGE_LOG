@@ -1,4 +1,11 @@
 
+
+v 0.1.3 (Tue, 10 Sept 2013):-
+
+Minor bug fixes in file comment rule.
+
+===========================================================================
+
 v 0.1.2 (Sun, 08 Sept 2013):-
 
 1.  Progress shown while files are scanned is turned off by default.
