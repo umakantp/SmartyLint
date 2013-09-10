@@ -61,12 +61,20 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
         $tokens = $smartylFile->getTokens();
         if ($stackPtr !== 0) {
             $error = 'Doc comment should be first thing in the file.';
-            $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongPosition');
+            if (isset($tokens[$stackPtr]['start'])) {
+                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongPosition');
+            } else {
+                $smartylFile->addError($error, $stackPtr, 'WrongPosition');
+            }
         }
 
         if ($tokens[$stackPtr]['content'][2] !== '*') {
             $error = 'You must use "'.$smartylFile->sDelimiter.'**" style comments for a file doc comment';
-            $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongStyle');
+            if (isset($tokens[$stackPtr]['start'])) {
+                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongStyle');
+            } else {
+                $smartylFile->addError($error, $stackPtr, 'WrongStyle');
+            }
             return;
         }
 
@@ -140,20 +148,22 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
 
         // Short description must be single line and end with a full stop.
         $testShort = trim($short);
-        $lastChar  = $testShort[(strlen($testShort) - 1)];
-        if (substr_count($testShort, $smartylFile->eolChar) !== 0) {
-            $error = 'File comment short description must be on a single line';
-            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortSingleLine');
-        }
+        if (strlen($testShort)) {
+            $lastChar  = $testShort[(strlen($testShort) - 1)];
+            if (substr_count($testShort, $smartylFile->eolChar) !== 0) {
+                $error = 'File comment short description must be on a single line';
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortSingleLine');
+            }
 
-        if (preg_match('|[A-Z]|', $testShort[0]) === 0) {
-            $error = 'File comment short description must start with a capital letter';
-            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortNotCapital');
-        }
+            if (preg_match('|[A-Z]|', $testShort[0]) === 0) {
+                $error = 'File comment short description must start with a capital letter';
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortNotCapital');
+            }
 
-        if ($lastChar !== '.') {
-            $error = 'File comment short description must end with a full stop';
-            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortFullStop');
+            if ($lastChar !== '.') {
+                $error = 'File comment short description must end with a full stop';
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortFullStop');
+            }
         }
     }
 
