@@ -121,7 +121,7 @@ class SmartyLint_Reporting {
 
         echo "\n\n";
 
-        return ($file['errors'] + $file['warnings']);
+        return $errorsShown;
     }
 
     /**
