@@ -121,7 +121,7 @@ class SmartyLint_CLI {
                 break;
 
             case 'v':
-                echo 'SmartyLint version 0.1.3 (alpha) '.PHP_EOL;
+                echo 'SmartyLint version 0.1.4 (alpha) '.PHP_EOL;
                 echo 'by Umakant Patil (http://smartylint.com)'.PHP_EOL.PHP_EOL;
                 exit(0);
                 break;
@@ -148,7 +148,7 @@ class SmartyLint_CLI {
                 exit(0);
                 break;
             case 'version':
-                echo 'SmartyLint version 0.1.3 (alpha) '.PHP_EOL;
+                echo 'SmartyLint version 0.1.4 (alpha) '.PHP_EOL;
                 echo 'by Umakant Patil (http://smartylint.com)'.PHP_EOL;
                 exit(0);
                 break;

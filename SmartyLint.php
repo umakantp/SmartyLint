@@ -372,7 +372,7 @@ class SmartyLint {
             }
 
             $dots++;
-            if ($dots === 60) {
+            if ($dots === 60 && $showProgress) {
                 $padding = ($maxLength - strlen($numProcessed));
                 echo str_repeat(' ', $padding);
                 echo " $numProcessed / $numFiles".PHP_EOL;

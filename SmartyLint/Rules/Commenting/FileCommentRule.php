@@ -78,8 +78,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             return;
         }
 
-        if ($tokens[($stackPtr+1)]['type'] !== 'NEW_LINE' || $tokens[($stackPtr+2)]['type'] !== 'NEW_LINE') {
-            $error = 'There must be exactly one blank line after file comment and before content';
+        if ($tokens[($stackPtr+1)]['type'] == 'NEW_LINE' && $tokens[($stackPtr+2)]['type'] == 'NEW_LINE') {
+            $error = 'There should not be any blank line after file comment and before content';
             $smartylFile->addError($error, ($stackPtr+2), 'SpacingAfterDocComments');
         }
 
