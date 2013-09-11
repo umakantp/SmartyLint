@@ -12,7 +12,7 @@
 
 include_once dirname(__FILE__).'/../SmartyLint.php';
 
-class SmartyLint_CLI {
+class SmartyLint_Cli {
 
     /**
      * An array of all values specified on the command line.

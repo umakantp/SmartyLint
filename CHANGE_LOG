@@ -5,7 +5,10 @@ v 0.1.4 (Tue, 11 Sept 2013):-
 Disabled rule which checkes for empty file after file comment and before content.
 It was disabled because it would print carriage return unnecessary when not needed.
 
-Bug fixed it would print "no of files" processed even when showProgress was off.
+Bugs fixed:-
+SmartyLint would print "no of files" processed even when showProgress was off.
+CLI file was having its name in CAPS.
+generate function in Report file was supposed to send total number of errors.
 
 ===========================================================================
 

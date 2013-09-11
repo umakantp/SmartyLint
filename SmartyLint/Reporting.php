@@ -35,7 +35,7 @@ class SmartyLint_Reporting {
      *
      * @param array $report Prepared report.
      *
-     * @return string
+     * @return integer
      */
     public function generate($report) {
         $errorsShown = 0;
@@ -120,6 +120,8 @@ class SmartyLint_Reporting {
         }
 
         echo "\n\n";
+
+        return ($file['errors'] + $file['warnings']);
     }
 
     /**
