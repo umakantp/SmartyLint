@@ -1,8 +1,14 @@
+v 0.2.0 (in development):-
 
+1. SmartyLint now tokenizes smarty tags.
+2. Added rule:- Show error when single line smarty tag has space before closing it.
+3. Updated copyright
+
+=========================================================================
 
 v 0.1.4 (Tue, 11 Sept 2013):-
 
-Disabled rule which checkes for empty file after file comment and before content.
+Disabled rule which checks for empty file after file comment and before content.
 It was disabled because it would print carriage return unnecessary when not needed.
 
 Bugs fixed:-
