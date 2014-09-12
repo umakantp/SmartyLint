@@ -7,3 +7,7 @@ Smarty ignore below tags and hence we ignore them
 Smarty bad tags
 
 {$extraSpaceAtTheEnd }
+
+{if {ifseta a=$data i='username'} }
+
+{/if}

@@ -145,10 +145,12 @@ class SmartyLint_Tokenizer_Smarty {
         $multiLine = false;
         $token['type'] = 'SMARTY';
         $contentStart = $currentLine;
+        $delimitersOpen = 0;
 
-        while ($this->chars[$pointer] !== $eD) {
+        do {
             $char = $this->chars[$pointer];
             $smartyContent .= $char;
+
             if ($char === "\r" || $char === "\n") {
                 $next = $this->getNext($pointer);
                 $currentLine++;
@@ -159,10 +161,16 @@ class SmartyLint_Tokenizer_Smarty {
                     // \r is already added. Just add \n.
                     $smartyContent .= "\n";
                 }
+            } else if ($char === '{') {
+                // Delimiter inside delimiter.
+                $delimitersOpen++;
+            } else if($char === $eD) {
+                $delimitersOpen--;
             }
+
             $pointer++;
-        }
-        $smartyContent .= $this->chars[$pointer];
+        } while ($delimitersOpen != 0);
+
         $token['content'] = $smartyContent;
         $token['line'] = $currentLine;
         if ($multiLine) {

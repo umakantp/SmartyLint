@@ -32,6 +32,7 @@ class Rules_Whitespace_TagsWhitespaceRule implements SmartyLint_Rule {
      */
     public function process(SmartyLint_File $smartylFile, $stackPtr) {
         $tokens = $smartylFile->getTokens();
+
         $data = $tokens[$stackPtr];
         $content = $data['content'];
 
