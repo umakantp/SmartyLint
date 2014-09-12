@@ -92,9 +92,13 @@ class SmartyLint_Tokenizer_Smarty {
                         $token[$pointer] = $this->getSmartyComment($i, $currentLine, $eD);
                         $i = ($i + strlen($token[$pointer]['content']) - 1);
                         $pointer++;
-                    } else {
+                    } else if ($this->isSmartyContent($i)) {
                         // It may be an Smarty variable, function, statement...etc.
-                        // Handle Smarty identifiers in next version.
+                        // Capture it as TYPE smarty.
+                        $token[$pointer] = $this->getSmartyContent($i, $currentLine, $eD);
+                        $i = ($i + strlen($token[$pointer]['content']) - 1);
+                        $pointer++;
+                    } else {
                         goto dodefault;
                     }
                     break;
@@ -102,9 +106,13 @@ class SmartyLint_Tokenizer_Smarty {
                 default:
                 dodefault:
                     // Chars, tags which are not known by tokenizer yet.
-                    $prev = $this->getPrevious($i);
+                    $last = $pointer - 1;
+                    $prev = [];
+                    if (isset($token[$last])) {
+                        $prev = $token[$last];
+                    }
                     if (isset($prev['type']) && $prev['type'] == 'UNKNOWN') {
-                        $last = $i - 1;
+                        $last = $pointer - 1;
                         $token[$last]['content'] = $prev['content'] . $char;
                     } else {
                         $token[$pointer] = array(
@@ -122,6 +130,49 @@ class SmartyLint_Tokenizer_Smarty {
     }
 
     /**
+     * Get Smarty content i.e. content inside { and } delimiters.
+     *
+     * Smarty comments are parsed separately and are not part of this function.
+     *
+     * @param integer  $pointer     Pointer onwards we are finding Smarty content.
+     * @param interget $currentLine Line from which we are processing.
+     * @param string   $ed          Ending delimiter for smarty.
+     *
+     * @return array
+     */
+    private function getSmartyContent($pointer, &$currentLine, $eD = '}') {
+        $smartyContent = '';
+        $multiLine = false;
+        $token['type'] = 'SMARTY';
+        $contentStart = $currentLine;
+
+        while ($this->chars[$pointer] !== $eD) {
+            $char = $this->chars[$pointer];
+            $smartyContent .= $char;
+            if ($char === "\r" || $char === "\n") {
+                $next = $this->getNext($pointer);
+                $currentLine++;
+                $multiLine = true;
+                if ($char === "\r" && $next === "\n") {
+                    // Double increment as we dont want to process next char.
+                    $pointer++;
+                    // \r is already added. Just add \n.
+                    $smartyContent .= "\n";
+                }
+            }
+            $pointer++;
+        }
+        $smartyContent .= $this->chars[$pointer];
+        $token['content'] = $smartyContent;
+        $token['line'] = $currentLine;
+        if ($multiLine) {
+            $token['multi'] = true;
+            $token['start'] = $contentStart;
+        }
+        return $token;
+    }
+
+    /**
      * Get Smarty Comment present from/beyond pointer.
      *
      * When you are calling this function which means you must have already called isSmartyComment.
@@ -130,7 +181,7 @@ class SmartyLint_Tokenizer_Smarty {
      *
      * @param integer $pointer Pointer onwards we are finding Smarty Comment.
      *
-     * @return boolean
+     * @return array
      */
     private function getSmartyComment($pointer, &$currentLine, $eD = '}') {
         $comment = '';
@@ -185,6 +236,17 @@ class SmartyLint_Tokenizer_Smarty {
         }
 
         return $token;
+    }
+
+    /**
+     * Tells if the content from/beyond given pointer is Smarty content.
+     *
+     * @param integer $pointer Pointer onwards we are finding Smarty content.
+     *
+     * @return boolean
+     */
+    private function isSmartyContent($pointer) {
+        return $this->getNext($pointer) !== ' ';
     }
 
     /**
