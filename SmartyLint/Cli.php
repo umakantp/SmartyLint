@@ -170,6 +170,37 @@ class SmartyLint_Cli {
     }
 
     /**
+     * Process as unknown command line argument.
+     *
+     * Assumes all unknown arguments are files and folders to check.
+     *
+     * @param string $arg    The command line argument.
+     * @param int    $pos    The position of the argument on the command line.
+     * @param array  $values An array of values determined from CLI args.
+     *
+     * @return array The updated CLI values.
+     * @see getCommandLineValues()
+     */
+    public function processUnknownArgument($arg, $pos, $values) {
+        // We don't know about any additional switches; just files.
+        if ($arg{0} === '-') {
+            echo 'ERROR: option "'.$arg.'" not known.'.PHP_EOL.PHP_EOL;
+            $this->printUsage();
+            exit(2);
+        }
+
+        $file = realpath($arg);
+        if (file_exists($file) === false) {
+            echo 'ERROR: The file "'.$arg.'" does not exist.'.PHP_EOL.PHP_EOL;
+            $this->printUsage();
+            exit(2);
+        } else {
+            $values['files'][] = $file;
+        }
+        return $values;
+    }
+
+    /**
      * Runs SmartyLint over files and directories.
      *
      * @param array $values An array of values determined from CLI args.
