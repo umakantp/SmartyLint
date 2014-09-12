@@ -38,7 +38,7 @@
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
- * @link      http://smartylint.com
+ * @link      https://github.com/umakantp/SmartyLint
  */
 
 abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint_CommentParser_DocElement {

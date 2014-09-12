@@ -6,9 +6,9 @@
  *
  * @package   SmartyLint
  * @author    Umakant Patil <me@umakantpatil.com>
- * @copyright 2014 Umakant Patil
+ * @copyright 2013-14 Umakant Patil
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
- * @link      http://smartylint.com
+ * @link      https://github.com/umakantp/SmartyLint
  */
 class Rules_Whitespace_TagsWhitespaceRule implements SmartyLint_Rule {
 

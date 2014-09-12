@@ -4,9 +4,9 @@
  *
  * @package   SmartyLint
  * @author    Umakant Patil <me@umakantpatil.com>
- * @copyright 2013 Umakant Patil
+ * @copyright 2013-14 Umakant Patil
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
- * @link      http://smartylint.com
+ * @link      https://github.com/umakantp/SmartyLint
  */
 class SmartyLint_Tokenizer_Smarty {
 

@@ -14,7 +14,7 @@
  * @author    Umakant Patil <me@umakantpatil.com>
  * @copyright 2006-2012 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
- * @link      http://smartylint.com
+ * @link      https://github.com/umakantp/SmartyLint
  */
 class SmartyLint_File {
 

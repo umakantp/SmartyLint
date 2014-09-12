@@ -4,9 +4,9 @@
  *
  * @package   SmartyLint
  * @author    Umakant Patil <me@umakantpatil.com>
- * @copyright 2013
+ * @copyright 2013-14
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
- * @link      http://smartylint.com
+ * @link      https://github.com/umakantp/SmartyLint
  */
 class SmartyLint_Exception extends Exception {
 
