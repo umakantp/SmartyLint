@@ -22,7 +22,7 @@ Download SmartyLint from github and start using.
     git checkout v0.1.4
     php smartyl -h
 
-See our documentation at http://smartylint.com/docs.htm for more information.
+See our documentation at https://github.com/umakantp/SmartyLint/wiki for more information.
 
 Smarty conventions
 ------------------
