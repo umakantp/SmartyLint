@@ -36,6 +36,7 @@ If you start using SmartyLint, it would force you to follow certain standards. C
 * Never use HTML comments. You should use Smarty comments {**} instead.
 * No whitespace / empty spaces at the end of each line.
 * Can have max only 2 empty lines in the content (i.e. 3 new lines in a row).
+* Never keep spaces inside smarty delimiters unless they are CSS or JS delimiters.
 
 More conventions would be added as an when code is added for it.
 
