@@ -332,13 +332,13 @@ class SmartyLint_File {
         }
 
         $this->_tokens = self::tokenizeString(
-                $contents,
-                $tokenizer,
-                $this->eolChar,
-                $this->lDelimiter,
-                $this->rDelimiter,
-                $this->autoLiteral
-            );
+            $contents,
+            $tokenizer,
+            $this->eolChar,
+            $this->lDelimiter,
+            $this->rDelimiter,
+            $this->autoLiteral
+        );
         $this->numTokens = count($this->_tokens);
 
         // Check for mixed line endings as these can cause tokenizer errors and we
@@ -640,16 +640,24 @@ class SmartyLint_File {
     /**
      * Creates an array of tokens when given some SMARTY code.
      *
-     * @param string $string    The string to tokenize.
-     * @param object $tokenizer A tokenizer class to use to tokenize the string.
-     * @param string $eolChar   The EOL character to use for splitting strings.
-     * @param string $sD        Start delimiter used to tokenize Smarty strings.
-     * @param string $eD        End delimiter used to tokenize Smarty strings.
+     * @param string $string      The string to tokenize.
+     * @param object $tokenizer   A tokenizer class to use to tokenize the string.
+     * @param string $eolChar     The EOL character to use for splitting strings.
+     * @param string $leftD       Start delimiter used to tokenize Smarty strings.
+     * @param string $rightD      End delimiter used to tokenize Smarty strings.
+     * @param string $autoLiteral If smarty has auto literal on.
      *
      * @return array
      */
-    public static function tokenizeString($string, $tokenizer, $eolChar='\n', $sD, $eD) {
-        return $tokenizer->tokenizeString($string, $eolChar, $sD, $eD);
+    public static function tokenizeString(
+        $string,
+        $tokenizer,
+        $eolChar='\n',
+        $leftD,
+        $rightD,
+        $autoLiteral
+    ) {
+        return $tokenizer->tokenizeString($string, $eolChar, $leftD, $rightD, $autoLiteral);
     }
 
     /**

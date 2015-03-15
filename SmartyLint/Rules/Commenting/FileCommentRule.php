@@ -68,7 +68,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             }
         }
 
-        if ($tokens[$stackPtr]['content'][2] !== '*') {
+        $startLen = (strlen($smartylFile->lDelimiter) + 1);
+        if ($tokens[$stackPtr]['content'][$startLen] !== '*') {
             $error = 'You must use "'.$smartylFile->lDelimiter.'**" style comments for a file doc comment';
             if (isset($tokens[$stackPtr]['line'])) {
                 $smartylFile->addError($error, array(0, $tokens[$stackPtr]['line']), 'WrongStyle');

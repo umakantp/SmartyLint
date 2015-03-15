@@ -158,10 +158,10 @@ class SmartyLint_Cli {
                     $values['extensions'] = explode(',', substr($arg, 11));
                 } else if (substr($arg, 0, 6) === 'files=') {
                     $values['files'] = explode(',', substr($arg, 6));
-                } else if (substr($arg, 0, 17) === 'left-delimiter=') {
-                    $values['leftDelimiter'] = substr($arg, 17);
-                } else if (substr($arg, 0, 15) === 'right-delimiter=') {
-                    $values['rightDelimiter'] = substr($arg, 15);
+                } else if (substr($arg, 0, 15) === 'left-delimiter=') {
+                    $values['leftDelimiter'] = substr($arg, 15);
+                } else if (substr($arg, 0, 16) === 'right-delimiter=') {
+                    $values['rightDelimiter'] = substr($arg, 16);
                 } else if (substr($arg, 0, 13) === 'ignore-rules=') {
                     $values['ignoreRules'] = substr($arg, 13);
                 } else if (substr($arg, 0, 13) === 'auto-literal=') {
