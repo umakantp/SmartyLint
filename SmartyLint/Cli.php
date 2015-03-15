@@ -28,8 +28,8 @@ class SmartyLint_Cli {
      */
     public function checkRequirements() {
         // Check the PHP version.
-        if (version_compare(PHP_VERSION, '5.2.4') === -1) {
-            echo 'ERROR: SmartyLint requires PHP version 5.2.4 or greater.'.PHP_EOL;
+        if (version_compare(PHP_VERSION, '5.3.0') === -1) {
+            echo 'ERROR: SmartyLint requires PHP version 5.3.0 or greater.'.PHP_EOL;
             exit(2);
         }
     }
@@ -43,10 +43,11 @@ class SmartyLint_Cli {
         // The default values for settings.
         $defaults['files'] = array();
         $defaults['extensions'] = array('tpl', 'smarty');
-        $defaults['startDelimiter'] = "{";
-        $defaults['endDelimiter'] = "}";
+        $defaults['leftDelimiter'] = "{";
+        $defaults['rightDelimiter'] = "}";
         $defaults['showProgress'] = false;
         $defaults['ignoreRules'] = null;
+        $defaults['autoLiteral'] = true;
 
         return $defaults;
     }
@@ -121,8 +122,8 @@ class SmartyLint_Cli {
                 break;
 
             case 'v':
-                echo 'SmartyLint version 0.1.4 (alpha) '.PHP_EOL;
-                echo 'by Umakant Patil (http://smartylint.com)'.PHP_EOL.PHP_EOL;
+                echo 'SmartyLint version 2.0.0 '.PHP_EOL;
+                echo 'by Umakant Patil (https://github.com/umakantp/SmartyLint)'.PHP_EOL.PHP_EOL;
                 exit(0);
                 break;
         }
@@ -148,8 +149,8 @@ class SmartyLint_Cli {
                 exit(0);
                 break;
             case 'version':
-                echo 'SmartyLint version 0.1.4 (alpha) '.PHP_EOL;
-                echo 'by Umakant Patil (http://smartylint.com)'.PHP_EOL;
+                echo 'SmartyLint version 2.0.0 '.PHP_EOL;
+                echo 'by Umakant Patil (https://github.com/umakantp/SmartyLint)'.PHP_EOL;
                 exit(0);
                 break;
             default:
@@ -157,12 +158,14 @@ class SmartyLint_Cli {
                     $values['extensions'] = explode(',', substr($arg, 11));
                 } else if (substr($arg, 0, 6) === 'files=') {
                     $values['files'] = explode(',', substr($arg, 6));
-                } else if (substr($arg, 0, 17) === 'start-delimiter=') {
-                    $values['startDelimiter'] = substr($arg, 17);
-                } else if (substr($arg, 0, 15) === 'end-delimiter=') {
-                    $values['endDelimiter'] = substr($arg, 15);
+                } else if (substr($arg, 0, 17) === 'left-delimiter=') {
+                    $values['leftDelimiter'] = substr($arg, 17);
+                } else if (substr($arg, 0, 15) === 'right-delimiter=') {
+                    $values['rightDelimiter'] = substr($arg, 15);
                 } else if (substr($arg, 0, 13) === 'ignore-rules=') {
                     $values['ignoreRules'] = substr($arg, 13);
+                } else if (substr($arg, 0, 13) === 'auto-literal=') {
+                    $values['autoLiteral'] = substr($arg, 13);
                 }
                 break;
         }
@@ -220,12 +223,16 @@ class SmartyLint_Cli {
             $lint->setAllowedFileExtensions($values['extensions']);
         }
 
-        if (empty($values['startDelimiter']) === false) {
-            $lint->setStartDelimiter($values['startDelimiter']);
+        if (empty($values['leftDelimiter']) === false) {
+            $lint->setLeftDelimiter($values['leftDelimiter']);
         }
 
-        if (empty($values['endDelimiter']) === false) {
-            $lint->setEndDelimiter($values['endDelimiter']);
+        if (empty($values['rightDelimiter']) === false) {
+            $lint->setRightDelimiter($values['rightDelimiter']);
+        }
+
+        if (empty($values['autoLiteral']) === false) {
+            $lint->setAutoLiteral($values['autoLiteral']);
         }
 
         $lint->setCli($this);
@@ -261,8 +268,8 @@ class SmartyLint_Cli {
      */
     public function printUsage() {
         echo 'Usage: smartyl --files=<files> [--extensions=<extensions>]'.PHP_EOL;
-        echo '    [--start-delimiter=<delimiter>] [--end-delimiter=<delimiter>]'.PHP_EOL;
-        echo '    [--ignore-rules=<rules>]'.PHP_EOL;
+        echo '    [--left-delimiter=<delimiter>] [--right-delimiter=<delimiter>]'.PHP_EOL;
+        echo '    [--auto-literal=<autoliteral>] [--ignore-rules=<rules>]'.PHP_EOL;
         echo '        -p                Show progress of the run'.PHP_EOL;
         echo '        -h                Print this help message'.PHP_EOL;
         echo '        -v                Print version information'.PHP_EOL;
@@ -274,5 +281,6 @@ class SmartyLint_Cli {
         echo '        <delimiter>       Delimiter used in smarty files.'.PHP_EOL.PHP_EOL;
         echo '        <rules>           Path to xml rule file which defines if any files are to'.PHP_EOL;
         echo '                          be excluded or any rule is to be turned off.'.PHP_EOL.PHP_EOL;
+        echo '        <autoliteral>     If auto literal is true or false in your smarty settings'.PHP_EOL.PHP_EOL;
     }
 }

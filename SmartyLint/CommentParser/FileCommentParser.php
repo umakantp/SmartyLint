@@ -152,9 +152,9 @@ class SmartyLint_CommentParser_FileCommentParser {
             $line = trim($line);
 
             if ($line !== '') {
-                if (substr($line, 0, 3) === ($this->smartylFile->sDelimiter.'**')) {
+                if (substr($line, 0, 3) === ($this->smartylFile->lDelimiter.'**')) {
                     $line = substr($line, 3);
-                } else if (substr($line, -2, 2) === ('*'.$this->smartylFile->eDelimiter)) {
+                } else if (substr($line, -2, 2) === ('*'.$this->smartylFile->rDelimiter)) {
                     $line = substr($line, 0, -2);
                 } else if ($line{0} === '*') {
                     $line = substr($line, 1);

@@ -47,7 +47,7 @@ class Rules_Commenting_TodoRule implements SmartyLint_Rule {
             if (preg_match('|[^a-z]+todo[^a-z]+(.*)|i', $c, $matches) !== 0) {
                 $type = 'CommentFound';
                 $todoMessage = trim($matches[1]);
-                $todoMessage = trim($todoMessage, '[]().*'.$smartylFile->eDelimiter);
+                $todoMessage = trim($todoMessage, '[]().*'.$smartylFile->rDelimiter);
                 $error       = 'Comment refers to a TODO task';
                 $data        = array($todoMessage);
                 if ($todoMessage !== '') {

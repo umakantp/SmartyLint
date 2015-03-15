@@ -33,18 +33,25 @@ class SmartyLint_File {
     public $eolChar = '';
 
     /**
-     * Start delimiter for Smarty.
+     * Left delimiter for Smarty.
      *
      * @var string
      */
-    public $sDelimiter = '';
+    public $lDelimiter = '';
 
     /**
-     * End delimiter for Smarty.
+     * Right delimiter for Smarty.
      *
      * @var string
      */
-    public $eDelimiter = '';
+    public $rDelimiter = '';
+
+    /**
+     * Auto literal settings for Smarty.
+     *
+     * @var string
+     */
+    public $autoLiteral = true;
 
     /**
      * The SmartyLint object controlling this run.
@@ -145,8 +152,9 @@ class SmartyLint_File {
         $this->_file = trim($file);
         $this->_listeners = $listeners;
         $this->smartyl = $smartyl;
-        $this->sDelimiter = $smartyl->startDelimiter;
-        $this->eDelimiter = $smartyl->endDelimiter;
+        $this->lDelimiter = $smartyl->leftDelimiter;
+        $this->rDelimiter = $smartyl->rightDelimiter;
+        $this->autoLiteral = $smartyl->autoLiteral;
     }
 
     /**
@@ -327,8 +335,9 @@ class SmartyLint_File {
                 $contents,
                 $tokenizer,
                 $this->eolChar,
-                $this->sDelimiter,
-                $this->eDelimiter
+                $this->lDelimiter,
+                $this->rDelimiter,
+                $this->autoLiteral
             );
         $this->numTokens = count($this->_tokens);
 

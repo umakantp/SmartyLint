@@ -38,7 +38,7 @@ class Rules_Commenting_NoHTMLCommentRule implements SmartyLint_Rule {
             $line = $tokens[$stackPtr]['line'];
         }
 
-        $error = 'Don\'t use HTML Comments. Use smarty comments '.$smartylFile->sDelimiter.'* *'.$smartylFile->eDelimiter;
+        $error = 'Don\'t use HTML Comments. Use smarty comments '.$smartylFile->lDelimiter.'* *'.$smartylFile->rDelimiter;
         $smartylFile->addWarning($error, array(0, $line), 'HTMLCommentFound');
     }
 }

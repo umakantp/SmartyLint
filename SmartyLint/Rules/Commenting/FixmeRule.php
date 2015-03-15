@@ -49,7 +49,7 @@ class Rules_Commenting_FixmeRule implements SmartyLint_Rule {
                 // the end of a fixme message to make the warning more informative.
                 $type = 'CommentFound';
                 $fixmeMessage = trim($matches[1]);
-                $fixmeMessage = trim($fixmeMessage, '[]().*'.$smartylFile->eDelimiter);
+                $fixmeMessage = trim($fixmeMessage, '[]().*'.$smartylFile->rDelimiter);
                 $error = 'Comment refers to a FIXME task';
                 $data = array($fixmeMessage);
                 if ($fixmeMessage !== '') {

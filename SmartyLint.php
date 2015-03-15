@@ -94,9 +94,9 @@ class SmartyLint {
      * @var array
      */
     private $_tokenListeners = array(
-                                'file'      => array(),
-                                'multifile' => array(),
-                               );
+        'file' => array(),
+        'multifile' => array(),
+    );
 
     /**
      * An array of rules to be skipped or disable these rules completely.
@@ -120,18 +120,26 @@ class SmartyLint {
     public $allowedFileExtensions = array('smarty', 'tpl');
 
     /**
-     * End delimiter for smarty.
+     * Right delimiter for smarty.
      *
      * @var string
      */
-    public $endDelimiter = '}';
+    public $rightDelimiter = '}';
 
     /**
-     * Start delimiter for smarty.
+     * Left delimiter for smarty.
      *
      * @var string
      */
-    public $startDelimiter = '{';
+    public $leftDelimiter = '{';
+
+    /**
+     * Auto literal setting for smarty.
+     *
+     *
+     * @var boolean
+     */
+    public $autoLiteral = true;
 
     /**
      * Constructs a SmartyLint object.
@@ -252,25 +260,42 @@ class SmartyLint {
     }
 
     /**
-     * Sets an end delimiter for smarty. Default is {.
+     * Sets an left delimiter for smarty. Default is {.
      *
-     * @param string $delimiter Start delimiter for smarty.
+     * @param string $delimiter Left delimiter for smarty.
      *
      * @return void
      */
-    public function setStartDelimiter($delimiter) {
-        $this->startDelimiter = $delimiter;
+    public function setLeftDelimiter($delimiter) {
+        $this->leftDelimiter = $delimiter;
     }
 
     /**
-     * Sets an end delimiter for smarty. Default is }.
+     * Sets an right delimiter for smarty. Default is }.
      *
-     * @param string $delimiter End delimiter for smarty.
+     * @param string $delimiter Right delimiter for smarty.
      *
      * @return void
      */
-    public function setEndDelimiter($delimiter) {
-        $this->endDelimiter = $delimiter;
+    public function setRightDelimiter($delimiter) {
+        $this->rightDelimiter = $delimiter;
+    }
+
+    /**
+     * Set if auto literal is on for smarty. Default is true.
+     *
+     * @param string $autoLiteral String value to be converted in
+     *                            boolean true or false.
+     *
+     * @return void
+     */
+    public function setAutoLiteral($autoLiteral) {
+            if ($autoLiteral == 'true') {
+                $autoLiteral = true;
+            } else if ($autoLiteral == 'false') {
+                $autoLiteral = false;
+            }
+            $this->autoLiteral = $autoLiteral;
     }
 
     /**
@@ -320,9 +345,9 @@ class SmartyLint {
         $this->listeners = array();
         $this->files = array();
         $this->_tokenListeners = array(
-                'file' => array(),
-                'multifile' => array(),
-            );
+            'file' => array(),
+            'multifile' => array(),
+        );
 
         // Ensure this option is enabled or else line endings will not always
         // be detected properly for files created on a Mac with the /r line ending.
@@ -611,9 +636,9 @@ class SmartyLint {
     public function populateTokenListeners() {
         // Construct a list of listeners indexed by token being listened for.
         $this->_tokenListeners = array(
-                                  'file'      => array(),
-                                  'multifile' => array(),
-                                 );
+            'file' => array(),
+            'multifile' => array(),
+        );
 
         foreach ($this->listeners as $listenerClass) {
             // Work out the internal code for this rule. Detect usage of namespace
