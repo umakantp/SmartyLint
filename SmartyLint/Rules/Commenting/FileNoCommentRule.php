@@ -40,7 +40,7 @@ class Rules_Commenting_FileNoCommentRule implements SmartyLint_Rule {
         $tokens = $smartylFile->getTokens();
         $hasDocComments = false;
         for ($tokenCount = 0; $tokenCount < $smartylFile->numTokens; $tokenCount++) {
-            if ($tokens[$tokenCount]['type'] == 'DOC_COMMENT') {
+            if ($tokens[$tokenCount]['type'] == 'SMARTY_DOC_COMMENT') {
                 $hasDocComments = true;
             }
         }

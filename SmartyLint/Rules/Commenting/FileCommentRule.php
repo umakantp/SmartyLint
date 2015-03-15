@@ -44,7 +44,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
      * @return array
      */
     public function register() {
-        return array('DOC_COMMENT');
+        return array('SMARTY_DOC_COMMENT');
     }
 
     /**
@@ -61,8 +61,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
         $tokens = $smartylFile->getTokens();
         if ($stackPtr !== 0) {
             $error = 'Doc comment should be first thing in the file.';
-            if (isset($tokens[$stackPtr]['start'])) {
-                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongPosition');
+            if (isset($tokens[$stackPtr]['line'])) {
+                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['line']), 'WrongPosition');
             } else {
                 $smartylFile->addError($error, $stackPtr, 'WrongPosition');
             }
@@ -70,8 +70,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
 
         if ($tokens[$stackPtr]['content'][2] !== '*') {
             $error = 'You must use "'.$smartylFile->sDelimiter.'**" style comments for a file doc comment';
-            if (isset($tokens[$stackPtr]['start'])) {
-                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['start']), 'WrongStyle');
+            if (isset($tokens[$stackPtr]['line'])) {
+                $smartylFile->addError($error, array(0, $tokens[$stackPtr]['line']), 'WrongStyle');
             } else {
                 $smartylFile->addError($error, $stackPtr, 'WrongStyle');
             }
@@ -87,7 +87,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             $this->commentParser = new SmartyLint_CommentParser_FileCommentParser($tokens[$stackPtr]['content'], $smartylFile);
             $this->commentParser->parse();
         } catch (SmartyLint_CommentParser_ParserException $e) {
-            $line = ($e->getLineWithinComment() + $tokens[$stackPtr]['start']);
+            $line = ($e->getLineWithinComment() + $tokens[$stackPtr]['line']);
             $smartylFile->addError($e->getMessage(), array(0, $line), 'FailedParse');
             return;
         }
@@ -99,7 +99,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             return;
         }
 
-        $this->processParams($tokens[$stackPtr]['start']);
+        $this->processParams($tokens[$stackPtr]['line']);
 
         // No extra newline before short description.
         $short = $comment->getShortComment();
@@ -107,7 +107,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
         $newlineSpan = strspn($short, $smartylFile->eolChar);
         if ($short !== '' && $newlineSpan > 0) {
             $error = 'Extra newline(s) found before file comment short description';
-            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'SpacingBeforeShort');
+            $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + 1)), 'SpacingBeforeShort');
         }
 
         $newlineCount = (substr_count($short, $smartylFile->eolChar) + 1);
@@ -119,7 +119,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             $newlineBetween = substr_count($between, $smartylFile->eolChar);
             if ($newlineBetween !== 2) {
                 $error = 'There must be exactly one blank line between descriptions in file comment';
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + $newlineCount + 1)), 'SpacingAfterShort');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + $newlineCount + 1)), 'SpacingAfterShort');
             }
 
             $newlineCount += $newlineBetween;
@@ -127,7 +127,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             $testLong = trim($long);
             if (preg_match('|[A-Z]|', $testLong[0]) === 0) {
                 $error = 'File comment long description must start with a capital letter';
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + $newlineCount + 1)), 'LongNotCaptial');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + $newlineCount + 1)), 'LongNotCaptial');
             }
         }
 
@@ -141,7 +141,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
                     $newlineCount += (substr_count($long, $smartylFile->eolChar) - $newlineSpan + 1);
                 }
 
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + $newlineCount)), 'SpacingBeforeTags');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + $newlineCount)), 'SpacingBeforeTags');
                 $short = rtrim($short, $smartylFile->eolChar.' ');
             }
         }
@@ -152,17 +152,17 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             $lastChar  = $testShort[(strlen($testShort) - 1)];
             if (substr_count($testShort, $smartylFile->eolChar) !== 0) {
                 $error = 'File comment short description must be on a single line';
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortSingleLine');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + 1)), 'ShortSingleLine');
             }
 
             if (preg_match('|[A-Z]|', $testShort[0]) === 0) {
                 $error = 'File comment short description must start with a capital letter';
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortNotCapital');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + 1)), 'ShortNotCapital');
             }
 
             if ($lastChar !== '.') {
                 $error = 'File comment short description must end with a full stop';
-                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['start'] + 1)), 'ShortFullStop');
+                $smartylFile->addError($error, array(0, ($tokens[$stackPtr]['line'] + 1)), 'ShortFullStop');
             }
         }
     }

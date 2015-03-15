@@ -18,7 +18,7 @@ class Rules_Commenting_TodoRule implements SmartyLint_Rule {
      * @return array
      */
     public function register() {
-        return array('COMMENT', 'DOC_COMMENT', 'HTML_COMMENT');
+        return array('SMARTY_COMMENT', 'SMARTY_DOC_COMMENT', 'HTML_COMMENT');
     }
 
     /**
