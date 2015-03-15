@@ -18,7 +18,7 @@
  *
  * @package   SmartyLint
  * @author    Umakant Patil <me@umakantpatil.com>
- * @copyright 2013-14 Umakant Patil
+ * @copyright 2013-15 Umakant Patil
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */

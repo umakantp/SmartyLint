@@ -4,7 +4,7 @@ SmartyLint
 About
 ------------
 
-SmartyLint is a PHP program that finds problems in Smarty files. It is tool that can be used for helping yourself for writing quality Smarty template files.
+SmartyLint is a PHP program that finds problems in Smarty files. It is tool that can be used for helping yourself for writing clean Smarty template files.
 
 
 Requirements
@@ -36,7 +36,6 @@ If you start using SmartyLint, it would force you to follow certain standards. C
 * Never use HTML comments. You should use Smarty comments {**} instead.
 * No whitespace / empty spaces at the end of each line.
 * Can have max only 2 empty lines in the content (i.e. 3 new lines in a row).
-* Never keep spaces inside smarty delimiters unless they are CSS or JS delimiters.
 
 More conventions would be added as an when code is added for it.
 
@@ -44,4 +43,4 @@ Contributing and Issues
 -----------------------
 
 * If you want to report a bug reports open new issue on github.
-* Have improvements? or Fixes? You can send in pull request for additional features or rules. Remember that keep code clean.
+* Have improvements? or Fixes? You can send in pull request for additional features or rules.

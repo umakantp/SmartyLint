@@ -17,10 +17,10 @@ error_reporting(E_ALL | E_STRICT);
 
 include_once dirname(__FILE__).'/SmartyLint/Cli.php';
 
-$smartylint = new SmartyLint_Cli();
-$smartylint->checkRequirements();
+$smartyLint = new SmartyLint_Cli();
+$smartyLint->checkRequirements();
 
-$numErrors = $smartylint->process();
+$numErrors = $smartyLint->process();
 if ($numErrors === 0) {
     exit(0);
 } else {
