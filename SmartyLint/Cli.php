@@ -46,7 +46,7 @@ class SmartyLint_Cli {
         $defaults['leftDelimiter'] = "{";
         $defaults['rightDelimiter'] = "}";
         $defaults['showProgress'] = false;
-        $defaults['ignoreRules'] = null;
+        $defaults['rules'] = null;
         $defaults['autoLiteral'] = true;
 
         return $defaults;
@@ -162,8 +162,8 @@ class SmartyLint_Cli {
                     $values['leftDelimiter'] = substr($arg, 15);
                 } else if (substr($arg, 0, 16) === 'right-delimiter=') {
                     $values['rightDelimiter'] = substr($arg, 16);
-                } else if (substr($arg, 0, 13) === 'ignore-rules=') {
-                    $values['ignoreRules'] = substr($arg, 13);
+                } else if (substr($arg, 0, 6) === 'rules=') {
+                    $values['rules'] = substr($arg, 6);
                 } else if (substr($arg, 0, 13) === 'auto-literal=') {
                     $values['autoLiteral'] = substr($arg, 13);
                 }
@@ -239,7 +239,7 @@ class SmartyLint_Cli {
 
         $lint->process(
             $values['files'],
-            $values['ignoreRules']
+            $values['rules']
         );
 
         return $this->printErrorReport($lint);
@@ -269,7 +269,7 @@ class SmartyLint_Cli {
     public function printUsage() {
         echo 'Usage: smartyl --files=<files> [--extensions=<extensions>]'.PHP_EOL;
         echo '    [--left-delimiter=<delimiter>] [--right-delimiter=<delimiter>]'.PHP_EOL;
-        echo '    [--auto-literal=<autoliteral>] [--ignore-rules=<rules>]'.PHP_EOL;
+        echo '    [--auto-literal=<autoliteral>] [--rules=<rules>]'.PHP_EOL;
         echo '        -p                Show progress of the run'.PHP_EOL;
         echo '        -h                Print this help message'.PHP_EOL;
         echo '        -v                Print version information'.PHP_EOL;
@@ -279,8 +279,9 @@ class SmartyLint_Cli {
         echo '        <extensions>      A comma separated list of file extensions to check'.PHP_EOL;
         echo '                          (only valid if checking a directory)'.PHP_EOL;
         echo '        <delimiter>       Delimiter used in smarty files.'.PHP_EOL.PHP_EOL;
-        echo '        <rules>           Path to xml rule file which defines if any files are to'.PHP_EOL;
-        echo '                          be excluded or any rule is to be turned off.'.PHP_EOL.PHP_EOL;
+        echo '        <rules>           Path to xml rule file which defines configuration or'.PHP_EOL;
+        echo '                          if any files are to be excluded or any rule is to be'.PHP_EOL;
+        echo '                          turned off.'.PHP_EOL.PHP_EOL;
         echo '        <autoliteral>     If auto literal is true or false in your smarty settings'.PHP_EOL.PHP_EOL;
     }
 }

@@ -1,5 +1,14 @@
 <?xml version="1.0"?>
 <rules>
+    <conf>
+        <leftDelimiter>{</leftDelimiter>
+        <rightDelimiter>}</rightDelimiter>
+        <autoLiteral>true</autoLiteral>
+        <extensions>
+            <extension>tpl</extension>
+            <extension>smarty</extension>
+        </extensions>
+    </conf>
     <ignore>
         <!-- Ignoring "sample-pattern" folder from checking. -->
         <pattern>*/sample-pattern/*</pattern>

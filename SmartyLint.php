@@ -325,14 +325,15 @@ class SmartyLint {
     /**
      * Processes the files/directories that SmartyLint was constructed with.
      *
-     * @param string|array $files       The files and directories to process. For
-     *                                  directories, each sub directory will also
-     *                                  be traversed for source files.
-     * @param string       $ignoreRules Ruleset file which defines which file and rule to exclude.
+     * @param string|array $files The files and directories to process. For
+     *                            directories, each sub directory will also
+     *                            be traversed for source files.
+     * @param string       $rules Ruleset file which defines configuration,
+     *                            which file and rule to exclude.
      *
      * @return void
      */
-    public function process($files, $ignoreRules = null) {
+    public function process($files, $rules = null) {
         if (is_array($files) === false) {
             if (is_string($files) === false || $files === null) {
                 throw new SmartyLint_Exception('$file must be a string');
@@ -353,8 +354,8 @@ class SmartyLint {
         // be detected properly for files created on a Mac with the /r line ending.
         ini_set('auto_detect_line_endings', true);
 
-        $this->setTokenListeners($ignoreRules);
-        $this->populateRules($ignoreRules);
+        $this->setTokenListeners($rules);
+        $this->populateRules($rules);
         $this->populateTokenListeners();
 
         if (empty($files) === true) {
@@ -411,7 +412,7 @@ class SmartyLint {
             $this->processMulti();
         }
 
-        echo "\n\n";
+        echo PHP_EOL.PHP_EOL;
     }
 
     /**
@@ -433,21 +434,21 @@ class SmartyLint {
     /**
      * Sets rules in the coding standard being used.
      *
-     * @param string $ignoreRules Path to a custom ruleset to ignore rule or file.
+     * @param string $rules Path to a custom ruleset to ignore rule or file or config.
      *
      * @return void
-     * @throws SmartyLint_Exception If the ignore ruleset is not valid.
+     * @throws SmartyLint_Exception If the ruleset is not valid.
      */
-    public function setTokenListeners($ignoreRules) {
+    public function setTokenListeners($rules) {
         $ruleset = null;
-        if ($ignoreRules != null && is_file($ignoreRules) === true) {
+        if ($rules != null && is_file($rules) === true) {
             // This is ignore files or rule ruleset file.
-            $ruleset = simplexml_load_file($ignoreRules);
+            $ruleset = simplexml_load_file($rules);
             if ($ruleset === false) {
-                throw new SmartyLint_Exception("Ignore ruleset $ignoreRules is not valid");
+                throw new SmartyLint_Exception("Ruleset $rules is not valid");
             }
-        } else if ($ignoreRules) {
-            throw new SmartyLint_Exception("No such file. $ignoreRules ");
+        } else if ($rules) {
+            throw new SmartyLint_Exception("No such file. $rules ");
         }
 
         self::$rulesDir = realpath(dirname(__FILE__).'/SmartyLint/Rules');
@@ -605,6 +606,26 @@ class SmartyLint {
             return;
         }
         $ruleset = simplexml_load_file($rules);
+        if (isset($ruleset->conf)) {
+            if (isset($ruleset->conf->leftDelimiter)) {
+                $this->setLeftDelimiter((string) $ruleset->conf->leftDelimiter);
+            }
+            if (isset($ruleset->conf->rightDelimiter)) {
+                $this->setRightDelimiter((string) $ruleset->conf->rightDelimiter);
+            }
+            if (isset($ruleset->conf->autoLiteral)) {
+                $this->setAutoLiteral((string) $ruleset->conf->autoLiteral);
+            }
+            if (isset($ruleset->conf->extensions)) {
+                $extensions = array();
+                foreach ($ruleset->conf->extensions->extension as $extension) {
+                    $extensions[] = (string) $extension;
+                }
+                if (count($extensions) > 0) {
+                    $this->setAllowedFileExtensions($extensions);
+                }
+            }
+        }
         foreach ($ruleset->ignore->rule as $rule) {
             $code = (string) $rule['name'];
             // Ignore patterns.
