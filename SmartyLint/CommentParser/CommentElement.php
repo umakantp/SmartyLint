@@ -23,7 +23,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_SingleElement{
+class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_SingleElement
+{
 
     /**
      * Constructs a SmartyLint_CommentParser_CommentElement.
@@ -56,7 +57,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      * @return string
      * @see getLongComment()
      */
-    public function getShortComment() {
+    public function getShortComment()
+    {
         $pos = $this->_getShortCommentEndPos();
         if ($pos === -1) {
             return '';
@@ -71,7 +73,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      * @return int The last token position of the short comment description
      * @see _getLongCommentStartPos()
      */
-    private function _getShortCommentEndPos() {
+    private function _getShortCommentEndPos()
+    {
         $found = false;
         $whiteSpace = array(
                 ' ',
@@ -107,7 +110,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      * @return string
      * @see getShortComment
      */
-    public function getLongComment() {
+    public function getLongComment()
+    {
         $start = $this->_getLongCommentStartPos();
         if ($start === -1) {
             return '';
@@ -124,7 +128,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      * @return int The start position of the long comment description.
      * @see _getShortCommentEndPos()
      */
-    private function _getLongCommentStartPos() {
+    private function _getLongCommentStartPos()
+    {
         $pos = ($this->_getShortCommentEndPos() + 1);
         if ($pos === (count($this->tokens) - 1)) {
             return -1;
@@ -151,7 +156,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      *
      * @return string
      */
-    public function getWhiteSpaceBetween() {
+    public function getWhiteSpaceBetween()
+    {
         $endShort  = ($this->_getShortCommentEndPos() + 1);
         $startLong = ($this->_getLongCommentStartPos() - 1);
         if ($startLong === -1) {
@@ -159,9 +165,9 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
         }
 
         return implode(
-                '',
-                array_slice($this->tokens, $endShort, ($startLong - $endShort))
-            );
+            '',
+            array_slice($this->tokens, $endShort, ($startLong - $endShort))
+        );
     }
 
     /**
@@ -169,7 +175,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      *
      * @return int
      */
-    public function getNewlineAfter() {
+    public function getNewlineAfter()
+    {
         $long = $this->getLongComment();
         if ($long !== '') {
             $long     = rtrim($long, ' ');
@@ -190,7 +197,8 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
      *
      * @return boolean
      */
-    public function isEmpty() {
+    public function isEmpty()
+    {
         return (trim($this->getContent()) === '');
     }
 }

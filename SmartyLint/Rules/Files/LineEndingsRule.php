@@ -10,7 +10,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class Rules_Files_LineEndingsRule implements SmartyLint_Rule {
+class Rules_Files_LineEndingsRule implements SmartyLint_Rule
+{
 
     /**
      * The valid EOL character.
@@ -24,7 +25,8 @@ class Rules_Files_LineEndingsRule implements SmartyLint_Rule {
      *
      * @return array
      */
-    public function register() {
+    public function register()
+    {
         return array('NEW_LINE');
     }
 
@@ -38,7 +40,8 @@ class Rules_Files_LineEndingsRule implements SmartyLint_Rule {
      *
      * @return void
      */
-    public function process(SmartyLint_File $smartylFile, $stackPtr) {
+    public function process(SmartyLint_File $smartylFile, $stackPtr)
+    {
         // We are only interested if this is the first new line in file.
         if ($stackPtr !== 0) {
             if ($smartylFile->findPrevious('NEW_LINE', ($stackPtr - 1)) !== false) {

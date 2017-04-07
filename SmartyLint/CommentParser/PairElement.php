@@ -12,7 +12,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_AbstractDocElement {
+class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_AbstractDocElement
+{
 
     /**
      * The value of the tag.
@@ -75,7 +76,8 @@ class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_Abst
      * @return array(string)
      * @see processSubElement()
      */
-    protected function getSubElements() {
+    protected function getSubElements()
+    {
         return array(
                 'value',
                 'comment',
@@ -93,7 +95,8 @@ class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_Abst
      * @return void
      * @see getSubElements()
      */
-    protected function processSubElement($name, $content, $whitespaceBefore) {
+    protected function processSubElement($name, $content, $whitespaceBefore)
+    {
         $element = '_'.$name;
         $whitespace = $element.'Whitespace';
         $this->$element = $content;
@@ -105,7 +108,8 @@ class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_Abst
      *
      * @return string
      */
-    public function getValue() {
+    public function getValue()
+    {
         return $this->_value;
     }
 
@@ -114,7 +118,8 @@ class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_Abst
      *
      * @return string
      */
-    public function getComment() {
+    public function getComment()
+    {
         return $this->_comment;
     }
 
@@ -123,7 +128,8 @@ class SmartyLint_CommentParser_PairElement extends SmartyLint_CommentParser_Abst
      *
      * @return string
      */
-    public function getWhitespaceBeforeValue() {
+    public function getWhitespaceBeforeValue()
+    {
         return $this->_valueWhitespace;
     }
 }

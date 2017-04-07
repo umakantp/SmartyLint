@@ -10,7 +10,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_ParserException extends Exception {
+class SmartyLint_CommentParser_ParserException extends Exception
+{
 
     /**
      * The line where the exception occured, in relation to the doc comment.
@@ -27,7 +28,8 @@ class SmartyLint_CommentParser_ParserException extends Exception {
      *                        A position of 0 indicates that the error occured
      *                        at the opening line of the doc comment.
      */
-    public function __construct($message, $line) {
+    public function __construct($message, $line)
+    {
         parent::__construct($message);
         $this->_line = $line;
     }
@@ -37,7 +39,8 @@ class SmartyLint_CommentParser_ParserException extends Exception {
      *
      * @return int
      */
-    public function getLineWithinComment() {
+    public function getLineWithinComment()
+    {
         return $this->_line;
     }
 }

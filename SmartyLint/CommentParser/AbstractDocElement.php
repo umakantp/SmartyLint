@@ -41,7 +41,8 @@
  * @link      https://github.com/umakantp/SmartyLint
  */
 
-abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint_CommentParser_DocElement {
+abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint_CommentParser_DocElement
+{
     /**
      * The element previous to this element.
      *
@@ -177,7 +178,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return SmartyLint_CommentParser_DocElement
      */
-    public function getPreviousElement() {
+    public function getPreviousElement()
+    {
         return $this->previousElement;
     }
 
@@ -187,7 +189,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return SmartyLint_CommentParser_DocElement
      */
-    public function getNextElement() {
+    public function getNextElement()
+    {
         return $this->nextElement;
     }
 
@@ -196,7 +199,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return string
      */
-    public function getWhitespaceBefore() {
+    public function getWhitespaceBefore()
+    {
         if ($this->previousElement !== null) {
             return $this->previousElement->getWhitespaceAfter();
         }
@@ -209,7 +213,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return string
      */
-    public function getWhitespaceAfter() {
+    public function getWhitespaceAfter()
+    {
         return $this->afterWhitespace;
     }
 
@@ -218,7 +223,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return int
      */
-    public function getOrder() {
+    public function getOrder()
+    {
         if ($this->previousElement === null) {
             return 1;
         } else {
@@ -231,7 +237,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return string
      */
-    public function getTag() {
+    public function getTag()
+    {
         return $this->tag;
     }
 
@@ -240,7 +247,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return string
      */
-    public function getRawContent() {
+    public function getRawContent()
+    {
         return implode('', $this->tokens);
     }
 
@@ -249,7 +257,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return array
      */
-    public function getTokens() {
+    public function getTokens()
+    {
         return $this->tokens;
     }
 
@@ -258,7 +267,8 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
      *
      * @return int
      */
-    public function getLine() {
+    public function getLine()
+    {
         if ($this->previousElement === null) {
             // First element is on line one.
             return 1;

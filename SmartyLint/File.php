@@ -16,7 +16,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_File {
+class SmartyLint_File
+{
 
     /**
      * The absolute path to the file associated with this object.
@@ -164,9 +165,9 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function setActiveListener($activeListener) {
+    public function setActiveListener($activeListener)
+    {
         $this->_activeListener = $activeListener;
-
     }
 
     /**
@@ -182,7 +183,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function addTokenListener(SmartyLint_Rule $listener, array $tokens) {
+    public function addTokenListener(SmartyLint_Rule $listener, array $tokens)
+    {
         foreach ($tokens as $token) {
             if (isset($this->_listeners[$token]) === false) {
                 $this->_listeners[$token] = array();
@@ -228,7 +230,8 @@ class SmartyLint_File {
      *
      * @return array()
      */
-    public function getTokens() {
+    public function getTokens()
+    {
         return $this->_tokens;
     }
 
@@ -240,7 +243,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function start($contents=null) {
+    public function start($contents = null)
+    {
         $this->_parse($contents);
 
         // Foreach of the listeners that have registered to listen for this
@@ -304,7 +308,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function cleanUp() {
+    public function cleanUp()
+    {
         $this->_tokens = null;
         $this->_listeners = null;
     }
@@ -317,7 +322,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    private function _parse($contents = null) {
+    private function _parse($contents = null)
+    {
         try {
             $this->eolChar = self::detectLineEndings($this->_file, $contents);
         } catch (SmartyLint_Exception $e) {
@@ -366,7 +372,8 @@ class SmartyLint_File {
      * @return string
      * @throws SmartyLint_Exception If $file could not be opened.
      */
-    public static function detectLineEndings($file, $contents=null) {
+    public static function detectLineEndings($file, $contents = null)
+    {
         if ($contents === null) {
             // Determine the newline character being used in this file.
             // Will be either \r, \r\n or \n.
@@ -389,7 +396,7 @@ class SmartyLint_File {
                 if ($secondLastChar === "\r") {
                     $eolChar = "\r\n";
                 }
-            } else if ($eolChar !== "\r") {
+            } elseif ($eolChar !== "\r") {
                 // Must not be an EOL char at the end of the line.
                 // Probably a one-line file, so assume \n as it really
                 // doesn't matter considering there are no newlines.
@@ -418,7 +425,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function addError($error, $stackPtr, $code='', $data=array()) {
+    public function addError($error, $stackPtr, $code = '', $data = array())
+    {
         // Work out which rule generated the error.
         if (substr($code, 0, 9) === 'Internal.') {
             // Any internal message.
@@ -511,7 +519,8 @@ class SmartyLint_File {
      *
      * @return void
      */
-    public function addWarning($warning, $stackPtr, $code='', $data=array()) {
+    public function addWarning($warning, $stackPtr, $code = '', $data = array())
+    {
         // Work out which rule generated the warning.
         if (substr($code, 0, 9) === 'Internal.') {
             // Any internal message.
@@ -597,7 +606,8 @@ class SmartyLint_File {
      *
      * @return int
      */
-    public function getErrorCount() {
+    public function getErrorCount()
+    {
         return $this->_errorCount;
     }
 
@@ -606,7 +616,8 @@ class SmartyLint_File {
      *
      * @return int
      */
-    public function getWarningCount() {
+    public function getWarningCount()
+    {
         return $this->_warningCount;
     }
 
@@ -615,7 +626,8 @@ class SmartyLint_File {
      *
      * @return array
      */
-    public function getErrors() {
+    public function getErrors()
+    {
         return $this->_errors;
     }
 
@@ -624,7 +636,8 @@ class SmartyLint_File {
      *
      * @return array
      */
-    public function getWarnings() {
+    public function getWarnings()
+    {
         return $this->_warnings;
     }
 
@@ -633,7 +646,8 @@ class SmartyLint_File {
      *
      * @return string
      */
-    public function getFilename() {
+    public function getFilename()
+    {
         return $this->_file;
     }
 
@@ -652,7 +666,7 @@ class SmartyLint_File {
     public static function tokenizeString(
         $string,
         $tokenizer,
-        $eolChar='\n',
+        $eolChar = '\n',
         $leftD,
         $rightD,
         $autoLiteral
@@ -686,9 +700,9 @@ class SmartyLint_File {
     public function findPrevious(
         $types,
         $start,
-        $end=null,
-        $exclude=false,
-        $value=null
+        $end = null,
+        $exclude = false,
+        $value = null
     ) {
         $types = (array) $types;
 
@@ -708,11 +722,10 @@ class SmartyLint_File {
             if ($found === true) {
                 if ($value === null) {
                     return $i;
-                } else if ($this->_tokens[$i]['content'] === $value) {
+                } elseif ($this->_tokens[$i]['content'] === $value) {
                     return $i;
                 }
             }
-
         }
 
         return false;

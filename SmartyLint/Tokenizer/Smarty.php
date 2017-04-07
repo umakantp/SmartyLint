@@ -8,7 +8,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_Tokenizer_Smarty {
+class SmartyLint_Tokenizer_Smarty
+{
 
     /**
      * Opening (left) delimiter of smarty.
@@ -96,7 +97,8 @@ class SmartyLint_Tokenizer_Smarty {
      *
      * @return array
      */
-    protected function convertToToken($skeleton) {
+    protected function convertToToken($skeleton)
+    {
         // Tokens to be stored here.
         $tokens = array();
         // Current cursor/pointer to the $tokens.
@@ -188,7 +190,7 @@ class SmartyLint_Tokenizer_Smarty {
                             break;
 
                         default:
-                        dodefault:
+                            dodefault:
                             // Chars which are unkown to SmartyLint yet.
                             $lastToken = null;
                             $lastPointer = ($pointer - 1);
@@ -235,7 +237,8 @@ class SmartyLint_Tokenizer_Smarty {
      *
      * @return array
      */
-    protected function parseSmarty($node, $currentLine) {
+    protected function parseSmarty($node, $currentLine)
+    {
         $token = array(
             'type' => 'SMARTY',
             'content' => $node['extraData'],
@@ -277,13 +280,14 @@ class SmartyLint_Tokenizer_Smarty {
      * @return array|null Return format ['index' => position of start tag, 'content' => tag match with delim,
      *                    'tag' => found part inside delim];
      */
-    protected function findTag($string) {
+    protected function findTag($string)
+    {
         $sDelim = $this->_leftDelim;
         $eDelim = $this->_rightDelim;
         $autoLiteral = $this->_autoLiteral;
         $openCount = 0;
         $offset = 0;
-        for($i = 0; $i < strlen($string); $i++) {
+        for ($i = 0; $i < strlen($string); $i++) {
             if (substr($string, $i, strlen($sDelim)) === $sDelim) {
                 preg_match('/\s/', substr($string, ($i+1), 1), $whiteSpaces);
                 if ($autoLiteral && (($i + 1) < strlen($string)) && $whiteSpaces) {
@@ -295,7 +299,7 @@ class SmartyLint_Tokenizer_Smarty {
                     $i = 0;
                 }
                 $openCount++;
-            } else if (substr($string, $i, strlen($eDelim)) === $eDelim) {
+            } elseif (substr($string, $i, strlen($eDelim)) === $eDelim) {
                 preg_match('/\s/', substr($string, ($i-1), 1), $whiteSpaces);
                 if ($autoLiteral && (($i - 1) >= 0) && $whiteSpaces) {
                     continue;

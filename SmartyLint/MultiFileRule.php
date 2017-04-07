@@ -13,7 +13,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-interface SmartyLint_MultiFileRule {
+interface SmartyLint_MultiFileRule
+{
     /**
      * Called once per script run to allow for processing of this rule.
      *

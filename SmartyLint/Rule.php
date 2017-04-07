@@ -9,7 +9,8 @@
  * @link      https://github.com/umakantp/SmartyLint
  */
 
-interface SmartyLint_Rule {
+interface SmartyLint_Rule
+{
 
     /**
      * Registers the tokens that this rule wants to listen for.
