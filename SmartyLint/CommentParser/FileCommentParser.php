@@ -9,7 +9,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_FileCommentParser {
+class SmartyLint_CommentParser_FileCommentParser
+{
 
     /**
      * The parameter elements within this function comment.
@@ -118,7 +119,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      * @param string          $comment     The comment to parse.
      * @param SmartyLint_File $smartylFile The file that this comment is in.
      */
-    public function __construct($comment, SmartyLint_File $smartylFile) {
+    public function __construct($comment, SmartyLint_File $smartylFile)
+    {
         $this->commentString = $comment;
         $this->smartylFile = $smartylFile;
     }
@@ -131,7 +133,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *                                                       problem with the
      *                                                       comment.
      */
-    public function parse() {
+    public function parse()
+    {
         if ($this->_hasParsed === false) {
             $this->_parse($this->commentString);
         }
@@ -145,7 +148,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      * @return void
      * @see _parseWords()
      */
-    private function _parse($comment) {
+    private function _parse($comment)
+    {
         // Firstly, remove the comment tags and any stars from the left side.
         $lines = explode($this->smartylFile->eolChar, $comment);
         foreach ($lines as &$line) {
@@ -156,9 +160,9 @@ class SmartyLint_CommentParser_FileCommentParser {
                 $rEnd = strlen($this->smartylFile->rDelimiter) + 1;
                 if (substr($line, 0, $lEnd) === ($this->smartylFile->lDelimiter.'**')) {
                     $line = substr($line, $lEnd);
-                } else if (substr($line, -($rEnd), $rEnd) === ('*'.$this->smartylFile->rDelimiter)) {
+                } elseif (substr($line, -($rEnd), $rEnd) === ('*'.$this->smartylFile->rDelimiter)) {
                     $line = substr($line, 0, -($rEnd));
-                } else if ($line{0} === '*') {
+                } elseif ($line{0} === '*') {
                     $line = substr($line, 1);
                 }
 
@@ -188,7 +192,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *                                                  number of occurances of
      *                                                  a tag is found.
      */
-    private function _parseWords() {
+    private function _parseWords()
+    {
         $allowedTags = (self::$_tags + $this->getAllowedTags());
         $allowedTagNames = array_keys($allowedTags);
         $prevTagPos = false;
@@ -298,7 +303,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return int
      */
-    protected function getLine($tokenPos) {
+    protected function getLine($tokenPos)
+    {
         $newlines = 0;
         for ($i = 0; $i < $tokenPos; $i++) {
             $newlines += substr_count($this->smartylFile->eolChar, $this->words[$i]);
@@ -314,7 +320,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return DocElement The element that represents this see comment.
      */
-    protected function parseSee($tokens) {
+    protected function parseSee($tokens)
+    {
         $see = new SmartyLint_CommentParser_SingleElement(
             $this->previousElement,
             $tokens,
@@ -333,7 +340,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return DocElement The element that represents this comment element.
      */
-    protected function parseComment($tokens) {
+    protected function parseComment($tokens)
+    {
         $this->comment = new SmartyLint_CommentParser_CommentElement(
             $this->previousElement,
             $tokens,
@@ -350,7 +358,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return SingleElement The element that represents this since tag.
      */
-    protected function parseSince($tokens) {
+    protected function parseSince($tokens)
+    {
         $this->since = new SmartyLint_CommentParser_SingleElement(
             $this->previousElement,
             $tokens,
@@ -368,7 +377,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return SingleElement The element that represents this link tag.
      */
-    protected function parseLink($tokens) {
+    protected function parseLink($tokens)
+    {
         $link = new SmartyLint_CommentParser_SingleElement(
             $this->previousElement,
             $tokens,
@@ -387,7 +397,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return SmartyLint_CommentParser_ParameterElement
      */
-    protected function parseParam($tokens) {
+    protected function parseParam($tokens)
+    {
         $param = new SmartyLint_CommentParser_ParameterElement(
             $this->previousElement,
             $tokens,
@@ -403,7 +414,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array(SingleElement)
      */
-    public function getSees() {
+    public function getSees()
+    {
         return $this->sees;
     }
 
@@ -412,7 +424,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return CommentElement
      */
-    public function getComment() {
+    public function getComment()
+    {
         return $this->comment;
     }
 
@@ -421,7 +434,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array
      */
-    public function getWords() {
+    public function getWords()
+    {
         return $this->words;
     }
 
@@ -430,7 +444,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array
      */
-    public function getTags() {
+    public function getTags()
+    {
         return $this->foundTags;
     }
 
@@ -441,7 +456,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array(SingleElement)
      */
-    public function getLinks() {
+    public function getLinks()
+    {
         return $this->links;
     }
 
@@ -452,7 +468,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return SingleElement
      */
-    public function getSince() {
+    public function getSince()
+    {
         return $this->since;
     }
 
@@ -469,7 +486,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      * @return void
      * @throws Exception If the process method for the tag cannot be found.
      */
-    protected function parseTag($tag, $start, $end) {
+    protected function parseTag($tag, $start, $end)
+    {
         $tokens = array_slice($this->words, ($start + 1), ($end - $start));
 
         $allowedTags     = (self::$_tags + $this->getAllowedTags());
@@ -498,7 +516,6 @@ class SmartyLint_CommentParser_FileCommentParser {
         ) {
             throw new Exception('Parse method must return a DocElement');
         }
-
     }//end parseTag()
 
     /**
@@ -506,7 +523,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array(string => boolean)
      */
-    protected function getAllowedTags() {
+    protected function getAllowedTags()
+    {
         return array('param'  => false);
     }
 
@@ -515,7 +533,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array
      */
-    public function getTagOrders() {
+    public function getTagOrders()
+    {
         return $this->orders;
     }
 
@@ -524,7 +543,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array
      */
-    public function getUnknown() {
+    public function getUnknown()
+    {
         return $this->unknown;
     }
 
@@ -536,7 +556,8 @@ class SmartyLint_CommentParser_FileCommentParser {
      *
      * @return array(SmartyLint_CommentParser_ParameterElement)
      */
-    public function getParams() {
+    public function getParams()
+    {
         return $this->_params;
     }
 }

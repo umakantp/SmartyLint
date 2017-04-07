@@ -8,6 +8,7 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_Exception extends Exception {
+class SmartyLint_Exception extends Exception
+{
 
 }

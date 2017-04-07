@@ -22,7 +22,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
+class Rules_Commenting_FileCommentRule implements SmartyLint_Rule
+{
 
     /**
      * The file doc comment parser for the current method.
@@ -43,7 +44,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
      *
      * @return array
      */
-    public function register() {
+    public function register()
+    {
         return array('SMARTY_DOC_COMMENT');
     }
 
@@ -56,7 +58,8 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
      *
      * @return void
      */
-    public function process(SmartyLint_File $smartylFile, $stackPtr) {
+    public function process(SmartyLint_File $smartylFile, $stackPtr)
+    {
         $this->currentFile = $smartylFile;
         $tokens = $smartylFile->getTokens();
         if ($stackPtr !== 0) {
@@ -176,11 +179,11 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
      *
      * @return void
      */
-    protected function processParams($commentStart) {
+    protected function processParams($commentStart)
+    {
         $params = $this->commentParser->getParams();
 
         if (empty($params) === false) {
-
             $lastParm = (count($params) - 1);
             if (substr_count($params[$lastParm]->getWhitespaceAfter(), $this->currentFile->eolChar) !== 2) {
                 $error  = 'Last parameter comment has a blank newline after it';
@@ -202,7 +205,6 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
             $longestVar = 0;
 
             foreach ($params as $param) {
-
                 $paramComment = trim($param->getComment());
                 $errorPos     = ($param->getLine() + $commentStart);
 

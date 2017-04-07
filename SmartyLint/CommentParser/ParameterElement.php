@@ -9,7 +9,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser_AbstractDocElement {
+class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser_AbstractDocElement
+{
 
     /**
      * The variable name of this parameter name, including the $ sign.
@@ -98,7 +99,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @return array(string)
      * @see processSubElement()
      */
-    protected function getSubElements() {
+    protected function getSubElements()
+    {
         return array(
                 'type',
                 'varName',
@@ -117,7 +119,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @return void
      * @see getSubElements()
      */
-    protected function processSubElement($name, $content, $beforeWhitespace) {
+    protected function processSubElement($name, $content, $beforeWhitespace)
+    {
         $element           = '_'.$name;
         $whitespace        = $element.'Whitespace';
         $this->$element    = $content;
@@ -129,7 +132,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      *
      * @return string
      */
-    public function getVarName() {
+    public function getVarName()
+    {
         return $this->_varName;
     }
 
@@ -139,7 +143,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      *
      * @return string
      */
-    public function getType() {
+    public function getType()
+    {
         return $this->_type;
     }
 
@@ -148,7 +153,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      *
      * @return string
      */
-    public function getComment() {
+    public function getComment()
+    {
         return $this->_comment;
     }
 
@@ -159,7 +165,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @see getWhiteSpaceBeforeVarName()
      * @see getWhiteSpaceBeforeComment()
      */
-    public function getWhiteSpaceBeforeType() {
+    public function getWhiteSpaceBeforeType()
+    {
         return $this->_typeWhitespace;
     }
 
@@ -170,7 +177,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @see getWhiteSpaceBeforeComment()
      * @see getWhiteSpaceBeforeType()
      */
-    public function getWhiteSpaceBeforeVarName() {
+    public function getWhiteSpaceBeforeVarName()
+    {
         return $this->_varNameWhitespace;
     }
 
@@ -182,7 +190,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @see getWhiteSpaceBeforeVarName()
      * @see getWhiteSpaceBeforeType()
      */
-    public function getWhiteSpaceBeforeComment() {
+    public function getWhiteSpaceBeforeComment()
+    {
         return $this->_commentWhitespace;
     }
 
@@ -194,7 +203,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      *
      * @return int
      */
-    public function getPosition() {
+    public function getPosition()
+    {
         if (($this->getPreviousElement() instanceof SmartyLint_CommentParser_ParameterElement) === false) {
             return 1;
         } else {
@@ -261,7 +271,8 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      *
      * @return boolean
      */
-    public function alignsWith(SmartyLint_CommentParser_ParameterElement $other) {
+    public function alignsWith(SmartyLint_CommentParser_ParameterElement $other)
+    {
         if ($this->alignsVariableWith($other) === false) {
             return false;
         }

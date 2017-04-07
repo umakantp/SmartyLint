@@ -12,7 +12,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_AbstractDocElement {
+class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_AbstractDocElement
+{
 
     /**
      * The content that exists after the tag.
@@ -59,7 +60,8 @@ class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_Ab
      * @return array(string)
      * @see processSubElement()
      */
-    protected function getSubElements() {
+    protected function getSubElements()
+    {
         return array('content');
     }
 
@@ -74,7 +76,8 @@ class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_Ab
      * @return void
      * @see getSubElements()
      */
-    protected function processSubElement($name, $content, $whitespaceBefore) {
+    protected function processSubElement($name, $content, $whitespaceBefore)
+    {
         $this->content = $content;
         $this->contentWhitespace = $whitespaceBefore;
     }
@@ -84,7 +87,8 @@ class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_Ab
      *
      * @return string
      */
-    public function getContent() {
+    public function getContent()
+    {
         return $this->content;
     }
 
@@ -93,7 +97,8 @@ class SmartyLint_CommentParser_SingleElement extends SmartyLint_CommentParser_Ab
      *
      * @return string
      */
-    public function getWhitespaceBeforeContent() {
+    public function getWhitespaceBeforeContent()
+    {
         return $this->contentWhitespace;
     }
 

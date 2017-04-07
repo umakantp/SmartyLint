@@ -13,7 +13,8 @@
 
 include_once dirname(__FILE__).'/../SmartyLint.php';
 
-class SmartyLint_Reporting {
+class SmartyLint_Reporting
+{
 
     /**
      * Actually generates the report.
@@ -22,7 +23,8 @@ class SmartyLint_Reporting {
      *
      * @return integer
      */
-    public function printReport($filesViolations) {
+    public function printReport($filesViolations)
+    {
         $reportData  = $this->prepare($filesViolations);
         $numErrors = $this->generate($reportData);
         return $numErrors;
@@ -37,7 +39,8 @@ class SmartyLint_Reporting {
      *
      * @return integer
      */
-    public function generate($report) {
+    public function generate($report)
+    {
         $errorsShown = 0;
         $width = 70;
 
@@ -133,7 +136,8 @@ class SmartyLint_Reporting {
      *
      * @return array
      */
-    public function prepare(array $filesViolations) {
+    public function prepare(array $filesViolations)
+    {
         $report = array(
                 'totals' => array(
                         'warnings' => 0,

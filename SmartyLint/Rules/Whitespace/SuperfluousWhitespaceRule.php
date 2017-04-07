@@ -10,14 +10,16 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-class Rules_Whitespace_SuperfluousWhitespaceRule implements SmartyLint_Rule {
+class Rules_Whitespace_SuperfluousWhitespaceRule implements SmartyLint_Rule
+{
 
     /**
      * Returns an array of tokens this test wants to listen for.
      *
      * @return array
      */
-    public function register() {
+    public function register()
+    {
         return array('NEW_LINE');
     }
 
@@ -30,7 +32,8 @@ class Rules_Whitespace_SuperfluousWhitespaceRule implements SmartyLint_Rule {
      *
      * @return void
      */
-    public function process(SmartyLint_File $smartylFile, $stackPtr) {
+    public function process(SmartyLint_File $smartylFile, $stackPtr)
+    {
         $tokens = $smartylFile->getTokens();
 
         $beforeNewLine = false;

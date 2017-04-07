@@ -22,6 +22,20 @@ Download SmartyLint from github and start using.
     git checkout v0.1.4
     php smartyl -h
 
+Or you can install using `composer`.
+
+Simply add a dependency on umakantp/smartylint to your project's `composer.json` file if you use Composer to manage the dependencies of your project. Here is a minimal example of a composer.json file that looks like this:
+
+```
+{
+    "require-dev": {
+        "umakantp/smartylint": "0.1.*"
+    }
+}
+```
+
+After running `composer install`, you can run `smartyl` from the `vendor\bin\` directory.
+
 See our documentation at https://github.com/umakantp/SmartyLint/wiki for more information.
 
 Smarty conventions

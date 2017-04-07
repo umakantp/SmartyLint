@@ -9,7 +9,8 @@
  * @license   https://github.com/umakantp/SmartyLint/blob/master/LICENSE BSD Licence
  * @link      https://github.com/umakantp/SmartyLint
  */
-interface SmartyLint_CommentParser_DocElement {
+interface SmartyLint_CommentParser_DocElement
+{
 
     /**
      * Returns the name of the tag this element represents, omitting the @ symbol.

@@ -12,7 +12,8 @@
 
 include_once dirname(__FILE__).'/../SmartyLint.php';
 
-class SmartyLint_Cli {
+class SmartyLint_Cli
+{
 
     /**
      * An array of all values specified on the command line.
@@ -26,7 +27,8 @@ class SmartyLint_Cli {
      *
      * @return array
      */
-    public function checkRequirements() {
+    public function checkRequirements()
+    {
         // Check the PHP version.
         if (version_compare(PHP_VERSION, '5.3.0') === -1) {
             echo 'ERROR: SmartyLint requires PHP version 5.3.0 or greater.'.PHP_EOL;
@@ -39,7 +41,8 @@ class SmartyLint_Cli {
      *
      * @return array
      */
-    public function getDefaults() {
+    public function getDefaults()
+    {
         // The default values for settings.
         $defaults['files'] = array();
         $defaults['extensions'] = array('tpl', 'smarty');
@@ -57,7 +60,8 @@ class SmartyLint_Cli {
      *
      * @return array
      */
-    public function getCommandLineValues() {
+    public function getCommandLineValues()
+    {
         if (empty($this->values) === false) {
             return $this->values;
         }
@@ -109,7 +113,8 @@ class SmartyLint_Cli {
      * @return array The updated CLI values.
      * @see getCommandLineValues()
      */
-    public function processShortArgument($arg, $pos, $values) {
+    public function processShortArgument($arg, $pos, $values)
+    {
         switch ($arg) {
             case 'h':
             case '?':
@@ -141,7 +146,8 @@ class SmartyLint_Cli {
      * @return array The updated CLI values.
      * @see getCommandLineValues()
      */
-    public function processLongArgument($arg, $pos, $values) {
+    public function processLongArgument($arg, $pos, $values)
+    {
 
         switch ($arg) {
             case 'help':
@@ -156,15 +162,15 @@ class SmartyLint_Cli {
             default:
                 if (substr($arg, 0, 11) === 'extensions=') {
                     $values['extensions'] = explode(',', substr($arg, 11));
-                } else if (substr($arg, 0, 6) === 'files=') {
+                } elseif (substr($arg, 0, 6) === 'files=') {
                     $values['files'] = explode(',', substr($arg, 6));
-                } else if (substr($arg, 0, 15) === 'left-delimiter=') {
+                } elseif (substr($arg, 0, 15) === 'left-delimiter=') {
                     $values['leftDelimiter'] = substr($arg, 15);
-                } else if (substr($arg, 0, 16) === 'right-delimiter=') {
+                } elseif (substr($arg, 0, 16) === 'right-delimiter=') {
                     $values['rightDelimiter'] = substr($arg, 16);
-                } else if (substr($arg, 0, 6) === 'rules=') {
+                } elseif (substr($arg, 0, 6) === 'rules=') {
                     $values['rules'] = substr($arg, 6);
-                } else if (substr($arg, 0, 13) === 'auto-literal=') {
+                } elseif (substr($arg, 0, 13) === 'auto-literal=') {
                     $values['autoLiteral'] = substr($arg, 13);
                 }
                 break;
@@ -184,7 +190,8 @@ class SmartyLint_Cli {
      * @return array The updated CLI values.
      * @see getCommandLineValues()
      */
-    public function processUnknownArgument($arg, $pos, $values) {
+    public function processUnknownArgument($arg, $pos, $values)
+    {
         // We don't know about any additional switches; just files.
         if ($arg{0} === '-') {
             echo 'ERROR: option "'.$arg.'" not known.'.PHP_EOL.PHP_EOL;
@@ -211,7 +218,8 @@ class SmartyLint_Cli {
      * @return int The number of error and warning messages shown.
      * @see getCommandLineValues()
      */
-    public function process($values=array()) {
+    public function process($values = array())
+    {
         if (empty($values) === true) {
             $values = $this->getCommandLineValues();
         }
@@ -252,7 +260,8 @@ class SmartyLint_Cli {
      *
      * @return int The number of error and warning messages shown.
      */
-    public function printErrorReport(SmartyLint $lint) {
+    public function printErrorReport(SmartyLint $lint)
+    {
         $reporting = new SmartyLint_Reporting();
         $filesViolations = $lint->getFilesErrors();
         $errors = $reporting->printReport($filesViolations);
@@ -266,7 +275,8 @@ class SmartyLint_Cli {
      *
      * @return void
      */
-    public function printUsage() {
+    public function printUsage()
+    {
         echo 'Usage: smartyl --files=<files> [--extensions=<extensions>]'.PHP_EOL;
         echo '    [--left-delimiter=<delimiter>] [--right-delimiter=<delimiter>]'.PHP_EOL;
         echo '    [--auto-literal=<autoliteral>] [--rules=<rules>]'.PHP_EOL;
