@@ -150,7 +150,7 @@ class SmartyLint_Tokenizer_Smarty {
                             break;
 
                         case '<':
-                            $k = isset($data[($j + 1)]) ? $data[($j + 1)] : null;
+                            $k = isset($data[($j + 1)]) ? (int)$data[($j + 1)] : null;
                             $l = isset($data[($k + 1)]) ? $data[($k + 1)] : null;
                             $multi = false;
                             if ($next === '!' && $k === $l && $l === '-') {
