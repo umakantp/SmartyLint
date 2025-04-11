@@ -58,7 +58,7 @@ class SmartyLint_Cli {
      * @return array
      */
     public function getCommandLineValues() {
-        if (empty($this->values) === false) {
+        if (! empty($this->values)) {
             return $this->values;
         }
 
@@ -70,14 +70,14 @@ class SmartyLint_Cli {
                 continue;
             }
 
-            if ($arg{0} === '-') {
+            if ($arg[0] === '-') {
                 if ($arg === '-' || $arg === '--') {
                     // Empty argument, ignore it.
                     continue;
                 }
 
 
-                if ($arg{1} === '-') {
+                if ($arg[1] === '-') {
                     $values
                         = $this->processLongArgument(substr($arg, 2), $i, $values);
                 } else {
@@ -154,17 +154,17 @@ class SmartyLint_Cli {
                 exit(0);
                 break;
             default:
-                if (substr($arg, 0, 11) === 'extensions=') {
+                if (str_starts_with($arg, 'extensions=')) {
                     $values['extensions'] = explode(',', substr($arg, 11));
-                } else if (substr($arg, 0, 6) === 'files=') {
+                } else if (str_starts_with($arg, 'files=')) {
                     $values['files'] = explode(',', substr($arg, 6));
-                } else if (substr($arg, 0, 15) === 'left-delimiter=') {
+                } else if (str_starts_with($arg, 'left-delimiter=')) {
                     $values['leftDelimiter'] = substr($arg, 15);
-                } else if (substr($arg, 0, 16) === 'right-delimiter=') {
+                } else if (str_starts_with($arg, 'right-delimiter=')) {
                     $values['rightDelimiter'] = substr($arg, 16);
-                } else if (substr($arg, 0, 6) === 'rules=') {
+                } else if (str_starts_with($arg, 'rules=')) {
                     $values['rules'] = substr($arg, 6);
-                } else if (substr($arg, 0, 13) === 'auto-literal=') {
+                } else if (str_starts_with($arg, 'auto-literal=')) {
                     $values['autoLiteral'] = substr($arg, 13);
                 }
                 break;
@@ -186,14 +186,14 @@ class SmartyLint_Cli {
      */
     public function processUnknownArgument($arg, $pos, $values) {
         // We don't know about any additional switches; just files.
-        if ($arg{0} === '-') {
+        if ($arg[0] === '-') {
             echo 'ERROR: option "'.$arg.'" not known.'.PHP_EOL.PHP_EOL;
             $this->printUsage();
             exit(2);
         }
 
         $file = realpath($arg);
-        if (file_exists($file) === false) {
+        if (! file_exists($file)) {
             echo 'ERROR: The file "'.$arg.'" does not exist.'.PHP_EOL.PHP_EOL;
             $this->printUsage();
             exit(2);
@@ -212,26 +212,26 @@ class SmartyLint_Cli {
      * @see getCommandLineValues()
      */
     public function process($values=array()) {
-        if (empty($values) === true) {
+        if (empty($values)) {
             $values = $this->getCommandLineValues();
         }
         $lint = new SmartyLint();
 
         // Set file extensions if they were specified. Otherwise,
         // let SmartyLint decide on the defaults.
-        if (empty($values['extensions']) === false) {
+        if (! empty($values['extensions'])) {
             $lint->setAllowedFileExtensions($values['extensions']);
         }
 
-        if (empty($values['leftDelimiter']) === false) {
+        if (! empty($values['leftDelimiter'])) {
             $lint->setLeftDelimiter($values['leftDelimiter']);
         }
 
-        if (empty($values['rightDelimiter']) === false) {
+        if (! empty($values['rightDelimiter'])) {
             $lint->setRightDelimiter($values['rightDelimiter']);
         }
 
-        if (empty($values['autoLiteral']) === false) {
+        if (! empty($values['autoLiteral'])) {
             $lint->setAutoLiteral($values['autoLiteral']);
         }
 

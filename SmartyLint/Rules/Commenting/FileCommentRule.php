@@ -94,7 +94,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
         }
 
         $comment = $this->commentParser->getComment();
-        if (is_null($comment) === true) {
+        if (is_null($comment)) {
             $error = 'File doc comment is empty';
             $smartylFile->addError($error, $stackPtr, 'Empty');
             return;
@@ -115,7 +115,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
 
         // Exactly one blank line between short and long description.
         $long = $comment->getLongComment();
-        if (empty($long) === false) {
+        if (! empty($long)) {
             $between = $comment->getWhiteSpaceBetween();
             $newlineBetween = substr_count($between, $smartylFile->eolChar);
             if ($newlineBetween !== 2) {
@@ -179,7 +179,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
     protected function processParams($commentStart) {
         $params = $this->commentParser->getParams();
 
-        if (empty($params) === false) {
+        if (! empty($params)) {
 
             $lastParm = (count($params) - 1);
             if (substr_count($params[$lastParm]->getWhitespaceAfter(), $this->currentFile->eolChar) !== 2) {
@@ -235,7 +235,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
                     $previousName = ($previousParam->getVarName() !== '') ? $previousParam->getVarName() : 'UNKNOWN';
 
                     // Check to see if the parameters align properly.
-                    if ($param->alignsVariableWith($previousParam) === false) {
+                    if (! $param->alignsVariableWith($previousParam)) {
                         $error = 'The variable names for parameters %s (%s) and %s (%s) do not align';
                         $data  = array(
                                   $previousName,
@@ -246,7 +246,7 @@ class Rules_Commenting_FileCommentRule implements SmartyLint_Rule {
                         $this->currentFile->addError($error, array(0, $errorPos), 'ParameterNamesNotAligned', $data);
                     }
 
-                    if ($param->alignsCommentWith($previousParam) === false) {
+                    if (! $param->alignsCommentWith($previousParam)) {
                         $error = 'The comments for parameters %s (%s) and %s (%s) do not align';
                         $data  = array(
                                   $previousName,

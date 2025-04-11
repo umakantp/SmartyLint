@@ -36,7 +36,7 @@ class Rules_Whitespace_TagsWhitespaceRule implements SmartyLint_Rule {
         $data = $tokens[$stackPtr];
         $content = $data['content'];
 
-        if (isset($data['multi']) && $data['multi'] === true) {
+        if (isset($data['multi']) && $data['multi']) {
             // Don't check anything for multiline smarty content as smarty
             // itself ignores it assuming it is CSS or JavaScript block.
         } else {

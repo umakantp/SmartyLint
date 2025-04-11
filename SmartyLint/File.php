@@ -184,11 +184,11 @@ class SmartyLint_File {
      */
     public function addTokenListener(SmartyLint_Rule $listener, array $tokens) {
         foreach ($tokens as $token) {
-            if (isset($this->_listeners[$token]) === false) {
+            if (! isset($this->_listeners[$token])) {
                 $this->_listeners[$token] = array();
             }
 
-            if (in_array($listener, $this->_listeners[$token], true) === false) {
+            if (! in_array($listener, $this->_listeners[$token], true)) {
                 $this->_listeners[$token][] = $listener;
             }
         }
@@ -209,11 +209,11 @@ class SmartyLint_File {
         array $tokens
     ) {
         foreach ($tokens as $token) {
-            if (isset($this->_listeners[$token]) === false) {
+            if (! isset($this->_listeners[$token])) {
                 continue;
             }
 
-            if (in_array($listener, $this->_listeners[$token]) === true) {
+            if (in_array($listener, $this->_listeners[$token])) {
                 foreach ($this->_listeners[$token] as $pos => $value) {
                     if ($value === $listener) {
                         unset($this->_listeners[$token][$pos]);
@@ -248,7 +248,7 @@ class SmartyLint_File {
         foreach ($this->_tokens as $stackPtr => $token) {
             // Check for ignored lines.
             if ($token['type'] === 'COMMENT' || $token['type'] === 'DOC_COMMENT') {
-                if (strpos($token['content'], '@noSmartyLint') !== false) {
+                if (str_contains($token['content'], '@noSmartyLint')) {
                     // Ignoring the whole file, just a little late.
                     $this->_errors = array();
                     $this->_warnings = array();
@@ -260,7 +260,7 @@ class SmartyLint_File {
 
             $tokenType = $token['type'];
 
-            if (isset($this->_listeners[$tokenType]) === false) {
+            if (! isset($this->_listeners[$tokenType])) {
                 continue;
             }
 
@@ -270,7 +270,7 @@ class SmartyLint_File {
 
                 // If the file path matches one of our ignore patterns, skip it.
                 $parts = explode('_', $class);
-                if (isset($parts[2]) === true) {
+                if (isset($parts[2])) {
                     $source = $parts[1].'.'.substr($parts[2], 0, -4);
                     $patterns = $this->smartyl->getIgnorePatterns($source);
                     foreach ($patterns as $pattern) {
@@ -350,7 +350,7 @@ class SmartyLint_File {
         $contents = str_replace($this->eolChar, '', $contents);
         $contents = str_replace("\n", '\n', $contents);
         $contents = str_replace("\r", '\r', $contents);
-        if (strpos($contents, '\\') !== false) {
+        if (str_contains($contents, '\\')) {
             $error = 'File has mixed line endings; this may cause incorrect results';
             $this->addError($error, 0, 'Internal.LineEndings.Mixed');
         }
@@ -370,7 +370,7 @@ class SmartyLint_File {
         if ($contents === null) {
             // Determine the newline character being used in this file.
             // Will be either \r, \r\n or \n.
-            if (is_readable($file) === false) {
+            if (! is_readable($file)) {
                 $error = 'Error opening file; file no longer exists or you do not have access to read the file';
                 throw new SmartyLint_Exception($error);
             } else {
@@ -420,14 +420,14 @@ class SmartyLint_File {
      */
     public function addError($error, $stackPtr, $code='', $data=array()) {
         // Work out which rule generated the error.
-        if (substr($code, 0, 9) === 'Internal.') {
+        if (str_starts_with($code, 'Internal.')) {
             // Any internal message.
             $rule = $code;
         } else {
             $parts = explode('_', $this->_activeListener);
 
 
-            if (isset($parts[2]) === true) {
+            if (isset($parts[2])) {
                 $rule = $parts[1].'.'.$parts[2];
 
                 // Remove "Rule" from the end.
@@ -462,11 +462,11 @@ class SmartyLint_File {
         }
 
         $this->_errorCount++;
-        if ($this->_recordErrors === false) {
+        if (! $this->_recordErrors) {
             return;
         }
 
-        if (empty($data) === true) {
+        if (empty($data)) {
             $message = $error;
         } else {
             $message = vsprintf($error, $data);
@@ -486,11 +486,11 @@ class SmartyLint_File {
             //$column  = $this->_tokens[$stackPtr]['column'];
         }
 
-        if (isset($this->_errors[$lineNum]) === false) {
+        if (! isset($this->_errors[$lineNum])) {
             $this->_errors[$lineNum] = array();
         }
 
-        if (isset($this->_errors[$lineNum][$column]) === false) {
+        if (! isset($this->_errors[$lineNum][$column])) {
             $this->_errors[$lineNum][$column] = array();
         }
 
@@ -513,12 +513,12 @@ class SmartyLint_File {
      */
     public function addWarning($warning, $stackPtr, $code='', $data=array()) {
         // Work out which rule generated the warning.
-        if (substr($code, 0, 9) === 'Internal.') {
+        if (str_starts_with($code, 'Internal.')) {
             // Any internal message.
             $rule = $code;
         } else {
             $parts = explode('_', $this->_activeListener);
-            if (isset($parts[2]) === true) {
+            if (isset($parts[2])) {
                 $rule = $parts[1].'.'.$parts[2];
 
                 // Remove "Rule" from the end.
@@ -554,11 +554,11 @@ class SmartyLint_File {
         }
 
         $this->_warningCount++;
-        if ($this->_recordErrors === false) {
+        if (! $this->_recordErrors) {
             return;
         }
 
-        if (empty($data) === true) {
+        if (empty($data)) {
             $message = $warning;
         } else {
             $message = vsprintf($warning, $data);
@@ -578,11 +578,11 @@ class SmartyLint_File {
             //$column  = $this->_tokens[$stackPtr]['column'];
         }
 
-        if (isset($this->_warnings[$lineNum]) === false) {
+        if (! isset($this->_warnings[$lineNum])) {
             $this->_warnings[$lineNum] = array();
         }
 
-        if (isset($this->_warnings[$lineNum][$column]) === false) {
+        if (! isset($this->_warnings[$lineNum][$column])) {
             $this->_warnings[$lineNum][$column] = array();
         }
 
@@ -652,7 +652,7 @@ class SmartyLint_File {
     public static function tokenizeString(
         $string,
         $tokenizer,
-        $eolChar='\n',
+        $eolChar,
         $leftD,
         $rightD,
         $autoLiteral
@@ -705,7 +705,7 @@ class SmartyLint_File {
                 }
             }
 
-            if ($found === true) {
+            if ($found) {
                 if ($value === null) {
                     return $i;
                 } else if ($this->_tokens[$i]['content'] === $value) {

@@ -59,6 +59,7 @@ class SmartyLint_Tokenizer_Smarty {
         $this->_leftDelim = $leftD;
         $this->_rightDelim = $rightD;
         $this->_eolChar = $eolChar;
+        $this->_autoLiteral = $autoLiteral;
         $skeleton = array();
 
         while ($tag = $this->findTag($string)) {
@@ -85,8 +86,7 @@ class SmartyLint_Tokenizer_Smarty {
         }
         // Skeleton creates which breaks smarty and other text apart.
         // Now get them converted to tokens which can be understood by Rule files.
-        $tokens = $this->convertToToken($skeleton);
-        return $tokens;
+        return $this->convertToToken($skeleton);
     }
 
     /**
@@ -116,7 +116,8 @@ class SmartyLint_Tokenizer_Smarty {
         foreach ($skeleton as $node) {
             if ($node['type'] === 'text') {
                 $data = $node['data'];
-                for ($i = 0; $i < strlen($data); $i++) {
+                $max = strlen($data);
+                for ($i = 0; $i < $max; $i++) {
                     $char = $data[$i];
                     $j = $i + 1;
                     $next = null;
@@ -150,14 +151,14 @@ class SmartyLint_Tokenizer_Smarty {
                             break;
 
                         case '<':
-                            $k = isset($data[($j + 1)]) ? $data[($j + 1)] : null;
-                            $l = isset($data[($k + 1)]) ? $data[($k + 1)] : null;
+                            $k = $data[($j + 1)] ?? null;
+                            $l = $data[($j + 2)] ?? null;
                             $multi = false;
                             if ($next === '!' && $k === $l && $l === '-') {
                                 // HTML comment found. Keep adding to content until it ends.
                                 $token = array('type' => 'HTML_COMMENT', 'line' => $currentLine);
                                 $content = '';
-                                while ($char !== '-' && $next !== '-' && $k !== '>') {
+                                while ($i + 2 < $max && !($char === '-' && $next === '-' && $k === '>')) {
                                     $content .= $char;
                                     if ($char === $eolChar) {
                                         $multi = true;
@@ -169,27 +170,29 @@ class SmartyLint_Tokenizer_Smarty {
                                     }
                                     $i++;
                                     $char = $data[$i];
-                                    $next = isset($data[($i + 1)]) ?: $data[($i + 1)];
-                                    $k = isset($data[($i + 2)]) ?: $data[($i + 2)];
+                                    $next = $data[$i + 1] ?? null;
+                                    $k = $data[$i + 2] ?? null;
                                 }
-                                $content .= $char . $next . $k;
-                                $i = $iPointer;
+                                if ($char === '-' && $next === '-' && $k === '>') {
+                                    $content .= $char . $next . $k;
+                                    $i += 2;
+                                }
                                 $token['content'] = $content;
                                 if ($multi) {
                                     $token['multi'] = true;
-                                    $token['end'] = $currrentLine;
+                                    $token['end'] = $currentLine;
                                 }
                                 $tokens[$pointer] = $token;
                                 $pointer++;
                             } else {
-                                // It may be an html tag.
+                                // It may be a html tag.
                                 goto dodefault;
                             }
                             break;
 
                         default:
                         dodefault:
-                            // Chars which are unkown to SmartyLint yet.
+                            // Chars which are unknown to SmartyLint yet.
                             $lastToken = null;
                             $lastPointer = ($pointer - 1);
                             if (isset($tokens[$lastPointer])) {

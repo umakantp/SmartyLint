@@ -33,7 +33,7 @@ class Rules_Indent_DisallowTabIndentRule implements SmartyLint_Rule {
     public function process(SmartyLint_File $smartylFile, $stackPtr) {
         $tokens = $smartylFile->getTokens();
 
-        if (strpos($tokens[$stackPtr]['content'], "\t") !== false) {
+        if (str_contains($tokens[$stackPtr]['content'], "\t")) {
             $error = 'Spaces must be used to indent lines; tabs are not allowed';
             $smartylFile->addError($error, $stackPtr, 'TabsUsed');
         }

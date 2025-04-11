@@ -35,7 +35,7 @@ class Rules_Commenting_FixmeRule implements SmartyLint_Rule {
 
         $content = $tokens[$stackPtr]['content'];
 
-        if (isset($tokens[$stackPtr]['multi']) && $tokens[$stackPtr]['multi'] == true) {
+        if ($tokens[$stackPtr]['multi'] ?? false) {
             $content = explode($smartylFile->eolChar, $content);
         } else {
             $content = array($content);

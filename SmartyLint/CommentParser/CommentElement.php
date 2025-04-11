@@ -81,11 +81,11 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
         foreach ($this->tokens as $pos => $token) {
             $token = str_replace($whiteSpace, '', $token);
             if ($token === $this->smartylFile->eolChar) {
-                if ($found === false) {
+                if (! $found) {
                     // Include newlines before short description.
                     continue;
                 } else {
-                    if (isset($this->tokens[($pos + 1)]) === true) {
+                    if (isset($this->tokens[($pos + 1)])) {
                         if ($this->tokens[($pos + 1)] === $this->smartylFile->eolChar) {
                             return ($pos - 1);
                         }
@@ -134,7 +134,7 @@ class SmartyLint_CommentParser_CommentElement extends SmartyLint_CommentParser_S
         for ($i = $pos; $i < $count; $i++) {
             $content = trim($this->tokens[$i]);
             if ($content !== '') {
-                if ($content{0} === '@') {
+                if ($content[0] === '@') {
                     return -1;
                 }
 

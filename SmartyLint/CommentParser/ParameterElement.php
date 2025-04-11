@@ -76,7 +76,7 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
 
         // Handle special variable type: array(x => y).
         $type = strtolower($this->_type);
-        if ($this->_varName === '=>' && strpos($type, 'array(') !== false) {
+        if ($this->_varName === '=>' && str_contains($type, 'array(')) {
             $rawContent = $this->getRawContent();
             $matches    = array();
             $pattern    = '/^(\s+)(array\(.*\))(\s+)(\$\S*)(\s+)(.*)/i';
@@ -195,7 +195,7 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @return int
      */
     public function getPosition() {
-        if (($this->getPreviousElement() instanceof SmartyLint_CommentParser_ParameterElement) === false) {
+        if (! ($this->getPreviousElement() instanceof SmartyLint_CommentParser_ParameterElement)) {
             return 1;
         } else {
             return ($this->getPreviousElement()->getPosition() + 1);
@@ -262,10 +262,10 @@ class SmartyLint_CommentParser_ParameterElement extends SmartyLint_CommentParser
      * @return boolean
      */
     public function alignsWith(SmartyLint_CommentParser_ParameterElement $other) {
-        if ($this->alignsVariableWith($other) === false) {
+        if (! $this->alignsVariableWith($other)) {
             return false;
         }
-        if ($this->alignsCommentWith($other) === false) {
+        if (! $this->alignsCommentWith($other)) {
             return false;
         }
         return true;

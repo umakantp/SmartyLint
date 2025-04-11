@@ -35,7 +35,7 @@ class Rules_Commenting_TodoRule implements SmartyLint_Rule {
 
         $content = $tokens[$stackPtr]['content'];
 
-        if (isset($tokens[$stackPtr]['multi']) && $tokens[$stackPtr]['multi'] == true) {
+        if ($tokens[$stackPtr]['multi'] ?? false) {
             $content = explode($smartylFile->eolChar, $content);
         } else {
             $content = array($content);
@@ -55,11 +55,7 @@ class Rules_Commenting_TodoRule implements SmartyLint_Rule {
                     $error .= ' "%s"';
                 }
 
-                if (isset($tokens[$stackPtr]['start'])) {
-                    $l = $tokens[$stackPtr]['start'];
-                } else {
-                    $l = $tokens[$stackPtr]['line'];
-                }
+                $l = $tokens[$stackPtr]['start'] ?? $tokens[$stackPtr]['line'];
                 $smartylFile->addWarning($error, array($l, $cLine), $type, $data);
             }
             $cLine++;

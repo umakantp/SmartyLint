@@ -45,7 +45,7 @@ interface SmartyLint_Rule {
      *    print_r($tokens[$stackPtr]);
      * </code>
      *
-     * If the rule discovers an anomilty in the code, they can raise an error
+     * If the rule discovers an anomaly in the code, they can raise an error
      * by calling addError() on the SmartyLint_File object, specifying an error
      * message and the position of the offending token:
      *
