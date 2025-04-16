@@ -19,7 +19,7 @@ Download SmartyLint from github and start using.
 
     git clone git://github.com/umakantp/SmartyLint.git
     cd SmartyLint
-    git checkout v0.1.4
+    git checkout v0.2.0
     php smartyl -h
 
 See our documentation at https://github.com/umakantp/SmartyLint/wiki for more information.

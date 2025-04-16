@@ -1,9 +1,11 @@
-v 0.2.0 (in development):-
+v 0.2.0 (Thu, 17 Apr 2025):-
 
 1. SmartyLint now tokenizes smarty tags.
 2. Added rule:- Show error when single line smarty tag has space before closing it.
 3. Updated copyright
 4. Added support for custom delimiters which are more than one character.
+5. PHP 8.1 support
+6. Functional issues
 
 =========================================================================
 
