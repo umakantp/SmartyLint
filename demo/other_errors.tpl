@@ -18,6 +18,6 @@ School : {$school} <br>
 
 {* TODO:: We don't allow TODO comments. *}
 
-We dont allowe HTML comments.
+We don't allow HTML comments.
 <!-- This is HTML comment -->
-
+<!-- This is an unclosed HTML comment

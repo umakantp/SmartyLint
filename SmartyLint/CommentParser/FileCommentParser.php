@@ -113,6 +113,13 @@ class SmartyLint_CommentParser_FileCommentParser {
     public $orders = array();
 
     /**
+     * The element that represents this comment element.
+     *
+     * @var DocElement
+     */
+    protected $comment = null;
+
+    /**
      * Constructs a SmartyLint_CommentParser_FileCommentParser.
      *
      * @param string          $comment     The comment to parse.
@@ -132,7 +139,7 @@ class SmartyLint_CommentParser_FileCommentParser {
      *                                                       comment.
      */
     public function parse() {
-        if ($this->_hasParsed === false) {
+        if (! $this->_hasParsed) {
             $this->_parse($this->commentString);
         }
     }
@@ -158,7 +165,7 @@ class SmartyLint_CommentParser_FileCommentParser {
                     $line = substr($line, $lEnd);
                 } else if (substr($line, -($rEnd), $rEnd) === ('*'.$this->smartylFile->rDelimiter)) {
                     $line = substr($line, 0, -($rEnd));
-                } else if ($line{0} === '*') {
+                } else if ($line[0] === '*') {
                     $line = substr($line, 1);
                 }
 
@@ -197,18 +204,16 @@ class SmartyLint_CommentParser_FileCommentParser {
             if (trim($word) !== '') {
                 $wordWasEmpty = false;
             }
-            if ($word{0} === '@') {
+            if ($word[0] === '@') {
                 $tag = substr($word, 1);
 
                 // Filter out @ tags in the comment description.
                 // A real comment tag should have whitespace and a newline before it.
-                if (isset($this->words[($wordPos - 1)]) === false
-                    || trim($this->words[($wordPos - 1)]) !== ''
-                ) {
+                if (!empty($this->words[$wordPos - 1])) {
                     continue;
                 }
 
-                if (isset($this->words[($wordPos - 2)]) === false
+                if (! isset($this->words[($wordPos - 2)])
                     || $this->words[($wordPos - 2)] !== $this->smartylFile->eolChar
                 ) {
                     continue;
@@ -232,7 +237,7 @@ class SmartyLint_CommentParser_FileCommentParser {
 
                 $prevTagPos = $wordPos;
 
-                if (in_array($tag, $allowedTagNames) === false) {
+                if (! in_array($tag, $allowedTagNames)) {
                     // This is not a tag that we process, but let's check to
                     // see if it is a tag we know about. If we don't know about it,
                     // we add it to a list of unknown tags.
@@ -244,7 +249,7 @@ class SmartyLint_CommentParser_FileCommentParser {
                             'tutorial',
                             'package_version@',
                         );
-                    if (in_array($tag, $knownTags) === false) {
+                    if (! in_array($tag, $knownTags)) {
                         $this->unknown[] = array(
                                 'tag'  => $tag,
                                 'line' => $this->getLine($wordPos),
@@ -256,7 +261,7 @@ class SmartyLint_CommentParser_FileCommentParser {
         }
 
         // Only process this tag if there was something to process.
-        if ($wordWasEmpty === false) {
+        if (! $wordWasEmpty) {
             if ($prevTagPos === false) {
                 // There must only be a comment in this doc comment.
                 $this->parseTag('comment', 0, count($this->words));
@@ -270,7 +275,7 @@ class SmartyLint_CommentParser_FileCommentParser {
                     // These are single-word tags, so anything after a newline
                     // is really a comment.
                     for ($endPos = $prevTagPos; $endPos < $numWords; $endPos++) {
-                        if (strpos($this->words[$endPos], $this->smartyl->eolChar) !== false) {
+                        if (str_contains($this->words[$endPos], $this->smartyl->eolChar)) {
                             break;
                         }
                     }
@@ -474,9 +479,9 @@ class SmartyLint_CommentParser_FileCommentParser {
 
         $allowedTags     = (self::$_tags + $this->getAllowedTags());
         $allowedTagNames = array_keys($allowedTags);
-        if ($tag === 'comment' || in_array($tag, $allowedTagNames) === true) {
+        if ($tag === 'comment' || in_array($tag, $allowedTagNames)) {
             $method = 'parse'.$tag;
-            if (method_exists($this, $method) === false) {
+            if (! method_exists($this, $method)) {
                 $error = 'Method '.$method.' must be implemented to process '.$tag.' tags';
                 throw new Exception($error);
             }
@@ -493,9 +498,7 @@ class SmartyLint_CommentParser_FileCommentParser {
 
         $this->orders[] = $tag;
 
-        if ($this->previousElement === null
-            || ($this->previousElement instanceof SmartyLint_CommentParser_DocElement) === false
-        ) {
+        if (! ($this->previousElement instanceof SmartyLint_CommentParser_DocElement)) {
             throw new Exception('Parse method must return a DocElement');
         }
 

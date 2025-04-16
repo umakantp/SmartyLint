@@ -14,23 +14,23 @@
 
 spl_autoload_register(array('SmartyLint', 'autoload'));
 
-if (class_exists('SmartyLint_Exception', true) === false) {
+if (! class_exists('SmartyLint_Exception', true)) {
     throw new Exception('Class SmartyLint_Exception not found');
 }
 
-if (class_exists('SmartyLint_File', true) === false) {
+if (! class_exists('SmartyLint_File', true)) {
     throw new SmartyLint_Exception('Class SmartyLint_File not found');
 }
 
-if (class_exists('SmartyLint_Cli', true) === false) {
+if (! class_exists('SmartyLint_Cli', true)) {
     throw new SmartyLint_Exception('Class SmartyLint_Cli not found');
 }
 
-if (interface_exists('SmartyLint_Rule', true) === false) {
+if (! interface_exists('SmartyLint_Rule', true)) {
     throw new SmartyLint_Exception('Interface SmartyLint_Rule not found');
 }
 
-if (interface_exists('SmartyLint_MultiFileRule', true) === false) {
+if (! interface_exists('SmartyLint_MultiFileRule', true)) {
     throw new SmartyLint_Exception('Interface SmartyLint_MultiFileRule not found');
 }
 
@@ -162,14 +162,14 @@ class SmartyLint {
     public static function autoload($className) {
         $path = str_replace(array('_', '\\'), '/', $className).'.php';
 
-        if (is_file(dirname(__FILE__).'/'.$path) === true) {
+        if (is_file(dirname(__FILE__).'/'.$path)) {
             // Check standard file locations based on class name.
             include dirname(__FILE__).'/'.$path;
-        } else if (is_file(dirname(__FILE__).'/SmartyLint/'.$path) === true) {
+        } else if (is_file(dirname(__FILE__).'/SmartyLint/'.$path)) {
             // Check for included rules.
             include dirname(__FILE__).'/SmartyLint/'.$path;
         } else if (self::$rulesDir !== ''
-            && is_file(dirname(self::$rulesDir).'/'.$path) === true
+            && is_file(dirname(self::$rulesDir).'/'.$path)
         ) {
             // Check standard file locations based on the passed standard directory.
             include dirname(self::$rulesDir).'/'.$path;
@@ -252,7 +252,7 @@ class SmartyLint {
             return $this->ignorePatterns;
         }
 
-        if (isset($this->ignorePatterns[$listener]) === true) {
+        if (isset($this->ignorePatterns[$listener])) {
             return $this->ignorePatterns[$listener];
         }
 
@@ -290,12 +290,7 @@ class SmartyLint {
      * @return void
      */
     public function setAutoLiteral($autoLiteral) {
-            if ($autoLiteral == 'true') {
-                $autoLiteral = true;
-            } else if ($autoLiteral == 'false') {
-                $autoLiteral = false;
-            }
-            $this->autoLiteral = $autoLiteral;
+            $this->autoLiteral = $autoLiteral == 'true';
     }
 
     /**
@@ -334,8 +329,8 @@ class SmartyLint {
      * @return void
      */
     public function process($files, $rules = null) {
-        if (is_array($files) === false) {
-            if (is_string($files) === false || $files === null) {
+        if (!is_array($files)) {
+            if (!is_string($files)) {
                 throw new SmartyLint_Exception('$file must be a string');
             }
 
@@ -352,13 +347,15 @@ class SmartyLint {
 
         // Ensure this option is enabled or else line endings will not always
         // be detected properly for files created on a Mac with the /r line ending.
-        ini_set('auto_detect_line_endings', true);
+        if (\PHP_VERSION_ID < 80100) {
+            ini_set('auto_detect_line_endings', true);
+        }
 
         $this->setTokenListeners($rules);
         $this->populateRules($rules);
         $this->populateTokenListeners();
 
-        if (empty($files) === true) {
+        if (empty($files)) {
             return;
         }
 
@@ -408,7 +405,7 @@ class SmartyLint {
 
         // Now process the multi-file rules, assuming there are
         // multiple files being checked.
-        if (count($files) > 1 || is_dir($files[0]) === true) {
+        if (count($files) > 1 || is_dir($files[0])) {
             $this->processMulti();
         }
 
@@ -441,7 +438,7 @@ class SmartyLint {
      */
     public function setTokenListeners($rules) {
         $ruleset = null;
-        if ($rules != null && is_file($rules) === true) {
+        if ($rules != null && is_file($rules)) {
             // This is ignore files or rule ruleset file.
             $ruleset = simplexml_load_file($rules);
             if ($ruleset === false) {
@@ -480,7 +477,7 @@ class SmartyLint {
             // contains namespace seperators instead of underscores, use this as the
             // class name from now on.
             $classNameNS = str_replace('_', '\\', $className);
-            if (class_exists($classNameNS, false) === true) {
+            if (class_exists($classNameNS, false)) {
                 $className = $classNameNS;
             }
 
@@ -506,13 +503,13 @@ class SmartyLint {
         $ownRules = array();
         $excludedRules = array();
 
-        if (is_dir($dir) === true) {
+        if (is_dir($dir)) {
             $di = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($dir));
             foreach ($di as $file) {
                 $fileName = $file->getFilename();
 
                 // Skip hidden files.
-                if (substr($fileName, 0, 1) === '.') {
+                if (str_starts_with($fileName, '.')) {
                     continue;
                 }
 
@@ -523,7 +520,7 @@ class SmartyLint {
                 }
 
                 $basename = basename($fileName, '.php');
-                if (substr($basename, -4) !== 'Rule') {
+                if (!str_ends_with($basename, 'Rule')) {
                     continue;
                 }
 
@@ -536,7 +533,7 @@ class SmartyLint {
         if ($rules !== null) {
             foreach ($rules->ignore->rule as $rule) {
                 // Get all rules which are globally disabled.
-                if (isset($rule->pattern) !== true) {
+                if (!isset($rule->pattern)) {
                     $excludedRules[] = $this->_expandRuleToFile($rule['name']);
                     $this->ignoreRules[] = $rule['name'];
                 }
@@ -549,7 +546,7 @@ class SmartyLint {
         // Filter out any excluded rules.
         $files = array();
         foreach ($ownRules as $rule) {
-            if (in_array($rule, $excludedRules) === true) {
+            if (in_array($rule, $excludedRules)) {
                 continue;
             } else {
                 $files[] = realpath($rule);
@@ -570,14 +567,14 @@ class SmartyLint {
     private function _expandRuleToFile($rule) {
         // Ignore internal sniffs as they are used to only
         // hide and change internal messages.
-        if (substr($rule, 0, 9) === 'Internal.') {
+        if (str_starts_with($rule, 'Internal.')) {
             return false;
         }
 
         // Work out the rule path.
         $parts = explode('.', $rule);
         if (count($parts) < 2) {
-            $error = "Referenced rule $sniff does not exist";
+            $error = "Referenced rule $rule does not exist";
             throw new SmartyLint_Exception($error);
         }
         $path = 'Rules/'.$parts[0];
@@ -586,9 +583,7 @@ class SmartyLint {
         }
         $path .= 'Rule.php';
 
-        $path = realpath(dirname(__FILE__).'/SmartyLint/'.$path);
-
-        return $path;
+        return realpath(dirname(__FILE__).'/SmartyLint/'.$path);
     }
 
     /**
@@ -630,7 +625,7 @@ class SmartyLint {
             $code = (string) $rule['name'];
             // Ignore patterns.
             foreach ($rule->pattern as $pattern) {
-                if (isset($this->ignorePatterns[$code]) === false) {
+                if (! isset($this->ignorePatterns[$code])) {
                     $this->ignorePatterns[$code] = array();
                 }
                 $this->ignorePatterns[$code][] = (string) $pattern;
@@ -663,39 +658,36 @@ class SmartyLint {
 
         foreach ($this->listeners as $listenerClass) {
             // Work out the internal code for this rule. Detect usage of namespace
-            // seperators instead of underscores to support PHP namespaces.
-            if (strstr($listenerClass, '\\') === false) {
+            // separators instead of underscores to support PHP namespaces.
+            if (!str_contains($listenerClass, '\\')) {
                 $parts = explode('_', $listenerClass);
             } else {
                 $parts = explode('\\', $listenerClass);
             }
 
-            $code  = $parts[0].'.'.$parts[2];
-            $code  = substr($code, 0, -5);
-
             $this->listeners[$listenerClass] = new $listenerClass();
 
-            if (($this->listeners[$listenerClass] instanceof SmartyLint_Rule) === true) {
+            if (($this->listeners[$listenerClass] instanceof SmartyLint_Rule)) {
                 $tokens = $this->listeners[$listenerClass]->register();
 
-                if (is_array($tokens) === false) {
+                if (is_array($tokens)) {
                     $msg = "Rule $listenerClass register() method must return an array";
                     throw new SmartyLint_Exception($msg);
                 }
 
                 foreach ($tokens as $token) {
-                    if (isset($this->_tokenListeners['file'][$token]) === false) {
+                    if (! isset($this->_tokenListeners['file'][$token])) {
                         $this->_tokenListeners['file'][$token] = array();
                     }
 
-                    if (in_array($this->listeners[$listenerClass], $this->_tokenListeners['file'][$token], true) === false) {
+                    if (! in_array($this->listeners[$listenerClass], $this->_tokenListeners['file'][$token], true) ) {
                         $this->_tokenListeners['file'][$token][] = array(
                                 'listener' => $this->listeners[$listenerClass],
                                 'class' => $listenerClass
                             );
                     }
                 }
-            } else if (($this->listeners[$listenerClass] instanceof SmartyLint_MultiFileRule) === true) {
+            } else if (($this->listeners[$listenerClass] instanceof SmartyLint_MultiFileRule)) {
                 $this->_tokenListeners['multifile'][] = array(
                         'listener' => $this->listeners[$listenerClass],
                         'class' => $listenerClass
@@ -719,7 +711,7 @@ class SmartyLint {
     public function getFilesToProcess($paths) {
         $files = array();
         foreach ($paths as $path) {
-            if (is_dir($path) === true) {
+            if (is_dir($path)) {
                 $di = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($path));
 
                 foreach ($di as $file) {
@@ -729,18 +721,18 @@ class SmartyLint {
                         continue;
                     }
 
-                    if (is_dir($filePath) === true) {
+                    if (is_dir($filePath)) {
                         continue;
                     }
 
-                    if ($this->shouldProcessFile($file->getPathname(), $path) === false) {
+                    if (! $this->shouldProcessFile($file->getPathname(), $path)) {
                         continue;
                     }
 
                     $files[] = $file->getPathname();
                 }
             } else {
-                if ($this->shouldIgnoreFile($path, dirname($path)) === true) {
+                if ($this->shouldIgnoreFile($path, dirname($path))) {
                     continue;
                 }
 
@@ -762,7 +754,7 @@ class SmartyLint {
      */
     public function shouldProcessFile($path, $basedir) {
         // Check that the file's extension is one we are checking.
-        // We are strict about checking the extension and we don't
+        // We are strict about checking the extension, and we don't
         // let files through with no extension or that start with a dot.
         $fileName  = basename($path);
         $fileParts = explode('.', $fileName);
@@ -770,7 +762,7 @@ class SmartyLint {
             return false;
         }
 
-        // Checking multi-part file extensions, so need to create a
+        // Checking multipart file extensions, so need to create a
         // complete extension list and make sure one is allowed.
         $extensions = array();
         array_shift($fileParts);
@@ -780,12 +772,12 @@ class SmartyLint {
         }
 
         $matches = array_intersect($extensions, $this->allowedFileExtensions);
-        if (empty($matches) === true) {
+        if (empty($matches)) {
             return false;
         }
 
         // If the file's path matches one of our ignore patterns, skip it.
-        if ($this->shouldIgnoreFile($path, $basedir) === true) {
+        if ($this->shouldIgnoreFile($path, $basedir)) {
             return false;
         }
 
@@ -804,7 +796,7 @@ class SmartyLint {
      */
     public function shouldIgnoreFile($path, $basedir) {
         $relativePath = $path;
-        if (strpos($path, $basedir) === 0) {
+        if (str_starts_with($path, $basedir)) {
             // The +1 cuts off the directory separator as well.
             $relativePath = substr($path, (strlen($basedir) + 1));
         }
@@ -851,7 +843,7 @@ class SmartyLint {
      * @see    _processFile()
      */
     public function processFile($file, $contents=null) {
-        if ($contents === null && file_exists($file) === false) {
+        if ($contents === null && ! file_exists($file)) {
             throw new SmartyLint_Exception("Source file $file does not exist");
         }
 
@@ -864,7 +856,7 @@ class SmartyLint {
         // to see if there is a tag up top to indicate that the whole
         // file should be ignored. It must be on one of the first two lines.
         $firstContent = $contents;
-        if ($contents === null && is_readable($filePath) === true) {
+        if ($contents === null && is_readable($filePath)) {
             $handle = fopen($filePath, 'r');
             if ($handle !== false) {
                 $firstContent  = fgets($handle);
@@ -873,7 +865,7 @@ class SmartyLint {
             }
         }
 
-        if (strpos($firstContent, '@noSmartyLint') !== false) {
+        if (str_contains($firstContent, '@noSmartyLint')) {
             return null;
         }
 
@@ -883,20 +875,19 @@ class SmartyLint {
             $trace = $e->getTrace();
 
             $filename = $trace[0]['args'][0];
-            if (is_object($filename) === true
+            if (is_object($filename)
                 && get_class($filename) === 'SmartyLint_File'
             ) {
                 $filename = $filename->getFilename();
-            } else if (is_numeric($filename) === true) {
+            } else if (is_numeric($filename)) {
                 // See if we can find the SmartyLint_File object.
                 foreach ($trace as $data) {
-                    if (isset($data['args'][0]) === true
-                        && ($data['args'][0] instanceof SmartyLint_File) === true
-                    ) {
-                        $filename = $data['args'][0]->getFilename();
+                    $file = $data['args'][0] ?? null;
+                    if ($file instanceof SmartyLint_File) {
+                        $filename = $file->getFilename();
                     }
                 }
-            } else if (is_string($filename) === false) {
+            } else if (! is_string($filename)) {
                 $filename = (string) $filename;
             }
 
@@ -936,7 +927,7 @@ class SmartyLint {
 
         // Clean up the test if we can to save memory. This can't be done if
         // we need to leave the files around for multi-file rules.
-        if (empty($this->_tokenListeners['multifile']) === true) {
+        if (empty($this->_tokenListeners['multifile'])) {
             $lintFile->cleanUp();
         }
 

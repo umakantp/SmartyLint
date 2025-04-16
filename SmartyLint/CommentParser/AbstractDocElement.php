@@ -110,9 +110,7 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
         $tag,
         SmartyLint_File $smartylFile
     ) {
-        if ($previousElement !== null
-            && ($previousElement instanceof SmartyLint_CommentParser_DocElement) === false
-        ) {
+        if (! ($previousElement instanceof SmartyLint_CommentParser_DocElement)) {
             $error = '$previousElement must be an instance of DocElement';
             throw new Exception($error);
         }
@@ -129,7 +127,7 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
 
         $subElements = $this->getSubElements();
 
-        if (is_array($subElements) === false) {
+        if (! is_array($subElements)) {
             throw new Exception('getSubElements() must return an array');
         }
 

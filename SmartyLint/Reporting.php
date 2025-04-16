@@ -42,7 +42,7 @@ class SmartyLint_Reporting {
         $width = 70;
 
         foreach ($report['files'] as $filename => $file) {
-            if (empty($file['messages']) === true) {
+            if (empty($file['messages'])) {
                 continue;
             }
 
@@ -188,11 +188,11 @@ class SmartyLint_Reporting {
                             );
                     }
 
-                    if (isset($errors[$line]) === false) {
+                    if (! isset($errors[$line])) {
                         $errors[$line] = array();
                     }
 
-                    if (isset($errors[$line][$column]) === true) {
+                    if (isset($errors[$line][$column])) {
                         $errors[$line][$column] = array_merge(
                             $newWarnings,
                             $errors[$line][$column]
