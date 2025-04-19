@@ -1,0 +1,26 @@
+{
+    "name": "umakantp/smarty-lint",
+    "description": "SmartyLint is a PHP tool that helps you find issues in your Smarty template files. It's designed to assist you in writing cleaner and more consistent Smarty templates",
+    "type": "project",
+    "homepage": "https://github.com/umakantp/SmartyLint",
+    "license": "BSD-3-Clause",
+    "version": "0.2.0",
+    "autoload": {
+        "psr-4": {
+            "Umakantp\\SmartyLint\\": "SmartLint/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Umakant Patil",
+            "email": "patil@umakant.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1"
+    },
+    "keywords": [
+        "smarty", "lint", "php", "template"
+    ]
+}
