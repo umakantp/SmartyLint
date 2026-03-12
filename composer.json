@@ -1,5 +1,5 @@
 {
-    "name": "umakantp/smarty-lint",
+    "name": "smarty/smarty-lint",
     "description": "SmartyLint is a PHP tool that helps you find issues in your Smarty template files. It's designed to assist you in writing cleaner and more consistent Smarty templates",
     "type": "library",
     "homepage": "https://github.com/umakantp/SmartyLint",
