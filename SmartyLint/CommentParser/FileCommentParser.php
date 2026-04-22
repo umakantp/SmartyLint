@@ -275,7 +275,7 @@ class SmartyLint_CommentParser_FileCommentParser {
                     // These are single-word tags, so anything after a newline
                     // is really a comment.
                     for ($endPos = $prevTagPos; $endPos < $numWords; $endPos++) {
-                        if (str_contains($this->words[$endPos], $this->smartyl->eolChar)) {
+                        if (str_contains($this->words[$endPos], $this->smartylFile->eolChar)) {
                             break;
                         }
                     }
@@ -306,7 +306,7 @@ class SmartyLint_CommentParser_FileCommentParser {
     protected function getLine($tokenPos) {
         $newlines = 0;
         for ($i = 0; $i < $tokenPos; $i++) {
-            $newlines += substr_count($this->smartylFile->eolChar, $this->words[$i]);
+            $newlines += substr_count($this->words[$i], $this->smartylFile->eolChar);
         }
 
         return $newlines;
