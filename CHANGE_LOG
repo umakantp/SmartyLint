@@ -1,6 +1,6 @@
-v 0.2.1 (Tue, 22 Apr 2026):-
+v 0.3.0 (Tue, 22 Apr 2026):-
 
-1. Update the package name in composer.json
+1. Added Composer support
 2. Fixed runtime errors in file comment parsing.
 3. Allowed the first doc comment element to parse correctly when no previous element exists.
 4. Fixed newline detection for single-word file comment tags like @package and @subpackage.
