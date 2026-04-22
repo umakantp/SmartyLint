@@ -329,6 +329,7 @@ class SmartyLint {
      * @return void
      */
     public function process($files, $rules = null) {
+        // I am not really sure why a check is necessary here, since the caller already handled this case.
         if (!is_array($files)) {
             if (!is_string($files)) {
                 throw new SmartyLint_Exception('$file must be a string');
@@ -670,7 +671,7 @@ class SmartyLint {
             if (($this->listeners[$listenerClass] instanceof SmartyLint_Rule)) {
                 $tokens = $this->listeners[$listenerClass]->register();
 
-                if (is_array($tokens)) {
+                if (! is_array($tokens)) {
                     $msg = "Rule $listenerClass register() method must return an array";
                     throw new SmartyLint_Exception($msg);
                 }

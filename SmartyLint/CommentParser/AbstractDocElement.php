@@ -110,7 +110,9 @@ abstract class SmartyLint_CommentParser_AbstractDocElement implements SmartyLint
         $tag,
         SmartyLint_File $smartylFile
     ) {
-        if (! ($previousElement instanceof SmartyLint_CommentParser_DocElement)) {
+        if ($previousElement !== null
+            && ! ($previousElement instanceof SmartyLint_CommentParser_DocElement)
+        ) {
             $error = '$previousElement must be an instance of DocElement';
             throw new Exception($error);
         }
