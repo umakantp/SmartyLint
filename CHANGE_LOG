@@ -1,4 +1,10 @@
-v 0.3.0 (Tue, 22 Apr 2026):-
+v 0.3.1 (Wed, 22 Apr 2026):-
+
+1. Fixed undefined array key "start" warnings in comment rules when processing multiline comments.
+
+=========================================================================
+
+v 0.3.0 (Wed, 22 Apr 2026):-
 
 1. Added Composer support
 2. Fixed runtime errors in file comment parsing.
@@ -78,4 +84,3 @@ Basic version derived from PHP CodeSniffer which checks for following convention
 "php smartyl -h" would show you all available options.
 
 ===========================================================================
-

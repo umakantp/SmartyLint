@@ -32,10 +32,9 @@ class Rules_Commenting_NoHTMLCommentRule implements SmartyLint_Rule {
      */
     public function process(SmartyLint_File $smartylFile, $stackPtr) {
         $tokens = $smartylFile->getTokens();
-        if (isset($tokens[$stackPtr]['multi'])) {
-            $line = $tokens[$stackPtr]['start'];
-        } else {
-            $line = $tokens[$stackPtr]['line'];
+        $line = $tokens[$stackPtr]['line'];
+        if ($tokens[$stackPtr]['multi'] ?? false) {
+            $line = $tokens[$stackPtr]['start'] ?? $line;
         }
 
         $error = 'Don\'t use HTML Comments. Use smarty comments '.$smartylFile->lDelimiter.'* *'.$smartylFile->rDelimiter;

@@ -57,11 +57,7 @@ class Rules_Commenting_FixmeRule implements SmartyLint_Rule {
                     $error .= ' "%s"';
                 }
 
-                if (isset($tokens[$stackPtr]['start'])) {
-                    $l = $tokens[$stackPtr]['start'];
-                } else {
-                    $l = $tokens[$stackPtr]['line'];
-                }
+                $l = $tokens[$stackPtr]['start'] ?? $tokens[$stackPtr]['line'];
                 $smartylFile->addError($error, array($l, $cLine), $type, $data);
             }
             $cLine++;
