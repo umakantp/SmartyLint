@@ -38,7 +38,12 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
     {
         $tokens = $smartylFile->getTokens();
         $content = $tokens[$stackPtr]['content'];
-        if (preg_match('/\{([^\}\s]*)/', $content, $matches)) {
+
+        $leftDelimiter = preg_quote($smartylFile->lDelimiter, '/');
+        $rightDelimiter = preg_quote($smartylFile->rDelimiter, '/');
+        $pattern = '/' . $leftDelimiter . '([^\s]+?)(?=\s|' . $rightDelimiter . ')/';
+
+        if (preg_match($pattern, $content, $matches)) {
             $this->computedTags[$stackPtr] = $matches[1];
         }
     }
