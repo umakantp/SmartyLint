@@ -245,6 +245,7 @@ class SmartyLint_File {
 
         // Foreach of the listeners that have registered to listen for this
         // token, get them to process it.
+        $finishListeners = [];
         foreach ($this->_tokens as $stackPtr => $token) {
             // Check for ignored lines.
             if ($token['type'] === 'COMMENT' || $token['type'] === 'DOC_COMMENT') {
@@ -292,10 +293,20 @@ class SmartyLint_File {
 
                 $this->setActiveListener($class);
 
-                $listener->process($this, $stackPtr);
+                $listener->process($this, $stackPtr, count($this->_listeners[$tokenType]));
+
+                if (method_exists($listener, 'finish')) {
+                    $finishListeners[$class] = $listener;
+                }
 
                 $this->_activeListener = '';
             }
+        }
+
+        foreach ($finishListeners as $class => $listener) {
+            $this->setActiveListener($class);
+            $listener->finish($this);
+            $this->_activeListener = '';
         }
     }
 
