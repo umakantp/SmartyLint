@@ -474,17 +474,16 @@ class SmartyLint_File {
 
         if ($stackPtr === null) {
             $lineNum = 1;
-            $column  = 1;
+        } elseif (is_array($stackPtr)) {
+            // This happens when token has multiple lines.
+            $lineNum = $stackPtr[0] + $stackPtr[1];
+        } elseif (isset($this->_tokens[$stackPtr])) {
+            $lineNum = $this->_tokens[$stackPtr]['line'];
         } else {
-            if (is_array($stackPtr)) {
-                // This is happens when token has multiple lines.
-                $lineNum = $stackPtr[0] + $stackPtr[1];
-            } else {
-                $lineNum = $this->_tokens[$stackPtr]['line'];
-            }
-            $column = 1;
-            //$column  = $this->_tokens[$stackPtr]['column'];
+            // Token pointer is invalid/missing. Avoid PHP warnings and report safely.
+            $lineNum = 1;
         }
+        $column  = 1;
 
         if (! isset($this->_errors[$lineNum])) {
             $this->_errors[$lineNum] = array();
