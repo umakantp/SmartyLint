@@ -43,8 +43,13 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
         $rightDelimiter = preg_quote($smartylFile->rDelimiter, '/');
         $pattern = '/' . $leftDelimiter . '([^\s]+?)(?=\s|' . $rightDelimiter . ')/';
 
-        if (preg_match($pattern, $content, $matches)) {
-            $this->computedTags[$stackPtr] = $matches[1];
+        if (preg_match_all($pattern, $content, $matches)) {
+            foreach ($matches[1] as $tag) {
+                $this->computedTags[] = [
+                    'tag' => $tag,
+                    'stackPtr' => $stackPtr,
+                ];
+            }
         }
     }
 
@@ -56,16 +61,43 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
      * @return void
      */
     public function finish(SmartyLint_File $smartylFile): void {
-        $tags = array_filter($this->computedTags, function($tag) {
-            return in_array($tag, self::REQUIRED_CLOSING_TAG);
-        });
-        foreach ($tags as $stackPtr => $tag) {
-            $closingTag = array_search('/'.$tag, $this->computedTags);
-            if ($closingTag !== false) {
-                unset($this->computedTags[$closingTag]);
-            } else {
-                $smartylFile->addError("Tag '{$tag}' is not closed.", $stackPtr, 'TagNotClosed');
+        $requiredClosingTags = array_fill_keys(self::REQUIRED_CLOSING_TAG, true);
+
+        $openTagStack = [];
+        foreach ($this->computedTags as $computedTag) {
+            $isClosingTag = str_starts_with($computedTag['tag'], '/');
+            $tag = $isClosingTag ? substr($computedTag['tag'], 1) : $computedTag['tag'];
+
+            if (! isset($requiredClosingTags[$tag])) {
+                continue;
             }
+
+            if (! $isClosingTag) {
+                $openTagStack[] = [
+                    'tag' => $tag,
+                    'stackPtr' => $computedTag['stackPtr'],
+                ];
+                continue;
+            }
+
+            if (empty($openTagStack)) {
+                continue;
+            }
+
+            $lastOpenTag = end($openTagStack);
+            if ($lastOpenTag['tag'] === $tag) {
+                array_pop($openTagStack);
+                continue;
+            }
+
+            $smartylFile->addError("Tag {$lastOpenTag['tag']} is not closed.", $lastOpenTag['stackPtr'], 'TagNotClosed');
+            array_pop($openTagStack);
         }
+
+        foreach ($openTagStack as $openTag) {
+            $smartylFile->addError("Tag {$openTag['tag']} is not closed.", $openTag['stackPtr'], 'TagNotClosed');
+        }
+
+        $this->computedTags = [];
     }
 }
