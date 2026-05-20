@@ -21,5 +21,11 @@
     },
     "keywords": [
         "smarty", "lint", "php", "template"
-    ]
+    ],
+    "require-dev": {
+        "php-parallel-lint/php-parallel-lint": "^1.4"
+    },
+    "scripts": {
+        "lint:php": "parallel-lint SmartyLint SmartyLint.php"
+    }
 }

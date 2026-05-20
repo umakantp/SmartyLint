@@ -531,7 +531,7 @@ class SmartyLint {
         }
 
         $this->ignoreRules = array();
-        if ($rules !== null) {
+        if ($rules !== null && isset($rules->ignore)) {
             foreach ($rules->ignore->rule as $rule) {
                 // Get all rules which are globally disabled.
                 if (!isset($rule->pattern)) {
@@ -622,24 +622,26 @@ class SmartyLint {
                 }
             }
         }
-        foreach ($ruleset->ignore->rule as $rule) {
-            $code = (string) $rule['name'];
-            // Ignore patterns.
-            foreach ($rule->pattern as $pattern) {
-                if (! isset($this->ignorePatterns[$code])) {
-                    $this->ignorePatterns[$code] = array();
-                }
-                $this->ignorePatterns[$code][] = (string) $pattern;
-            }
-        }
-
         $this->ignorePatterns['global'] = array();
-        if (is_string($ruleset->ignore->pattern)) {
-            $this->ignorePatterns['global'][] = $ruleset['pattern'];
-        } else {
-            // Process custom ignore pattern rules.
-            foreach ($ruleset->ignore->pattern as $pattern) {
-                $this->ignorePatterns['global'][] = (string) $pattern;
+        if (isset($ruleset->ignore)) {
+            foreach ($ruleset->ignore->rule as $rule) {
+                $code = (string) $rule['name'];
+                // Ignore patterns.
+                foreach ($rule->pattern as $pattern) {
+                    if (! isset($this->ignorePatterns[$code])) {
+                        $this->ignorePatterns[$code] = array();
+                    }
+                    $this->ignorePatterns[$code][] = (string) $pattern;
+                }
+            }
+
+            if (is_string($ruleset->ignore->pattern)) {
+                $this->ignorePatterns['global'][] = $ruleset['pattern'];
+            } else {
+                // Process custom ignore pattern rules.
+                foreach ($ruleset->ignore->pattern as $pattern) {
+                    $this->ignorePatterns['global'][] = (string) $pattern;
+                }
             }
         }
     }
