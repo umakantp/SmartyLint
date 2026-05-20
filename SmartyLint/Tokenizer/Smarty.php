@@ -288,6 +288,9 @@ class SmartyLint_Tokenizer_Smarty {
         $offset = 0;
         for($i = 0; $i < strlen($string); $i++) {
             if (substr($string, $i, strlen($sDelim)) === $sDelim) {
+                if (substr($string, ($i + strlen($sDelim)), strlen($sDelim)) === $sDelim) {
+                    continue;
+                }
                 preg_match('/\s/', substr($string, ($i+1), 1), $whiteSpaces);
                 if ($autoLiteral && (($i + 1) < strlen($string)) && $whiteSpaces) {
                     continue;
@@ -300,7 +303,7 @@ class SmartyLint_Tokenizer_Smarty {
                 $openCount++;
             } else if (substr($string, $i, strlen($eDelim)) === $eDelim) {
                 preg_match('/\s/', substr($string, ($i-1), 1), $whiteSpaces);
-                if ($autoLiteral && (($i - 1) >= 0) && $whiteSpaces) {
+                if ($autoLiteral && (($i - 1) >= 0) && $whiteSpaces && $openCount === 0) {
                     continue;
                 }
                 $l = --$openCount;
