@@ -120,6 +120,13 @@ class SmartyLint {
     public $allowedFileExtensions = array('smarty', 'tpl');
 
     /**
+     * An array of configured custom block tags.
+     *
+     * @var array
+     */
+    public $customBlockTags = [];
+
+    /**
      * Right delimiter for smarty.
      *
      * @var string
@@ -188,6 +195,17 @@ class SmartyLint {
      */
     public function setAllowedFileExtensions(array $extensions) {
         $this->allowedFileExtensions = $extensions;
+    }
+
+    /**
+     * Sets an array of configured custom block tags
+     *
+     * @param array $tags An array of custom block tags.
+     *
+     * @return void
+     */
+    public function setCustomBlockTags(array $tags) {
+        $this->customBlockTags = $tags;
     }
 
 
@@ -620,6 +638,14 @@ class SmartyLint {
                 if (count($extensions) > 0) {
                     $this->setAllowedFileExtensions($extensions);
                 }
+            }
+
+            if (isset($ruleset->conf->customTags)) {
+                $customBlockTags = [];
+                foreach ($ruleset->conf->customTags->block as $block) {
+                    $customBlockTags[] = (string) $block;
+                }
+                $this->setCustomBlockTags($customBlockTags);
             }
         }
         $this->ignorePatterns['global'] = array();

@@ -8,6 +8,10 @@
             <extension>tpl</extension>
             <extension>smarty</extension>
         </extensions>
+        <customTags>
+            <block>foo_tag</block>
+            <block>bar_tag</block>
+        </customTags>
     </conf>
     <ignore>
         <!-- Ignoring "sample-pattern" folder from checking. -->
