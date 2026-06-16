@@ -13,7 +13,8 @@
 
 class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
 
-    protected const REQUIRED_CLOSING_TAG = [ 'if', 'foreach', 'section', 'while', 'capture', 'block', 'function', 'strip', 'php', 'nocache', 'literal', 'for', 'setfilter' ];
+    protected const BUILTIN_CLOSING_TAGS = [ 'if', 'foreach', 'section', 'while', 'capture', 'block', 'function', 'strip', 'php', 'nocache', 'literal', 'for', 'setfilter' ];
+
     protected $computedTags = [];
 
     /**
@@ -61,7 +62,7 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
      * @return void
      */
     public function finish(SmartyLint_File $smartylFile): void {
-        $requiredClosingTags = array_fill_keys(self::REQUIRED_CLOSING_TAG, true);
+        $requiredClosingTags = array_fill_keys(array_merge(self::BUILTIN_CLOSING_TAGS, $smartylFile->smartyl->customBlockTags), true);
 
         $openTagStack = [];
         foreach ($this->computedTags as $computedTag) {
