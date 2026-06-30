@@ -1,3 +1,14 @@
+v 0.4.0 (Tue, 30 Jun 2026):-
+
+1. Added rule to detect unclosed Smarty block tags.
+2. Added support for custom Smarty block tags in ClosedTagRule.
+3. Improved tokenizer to handle multiline closing delimiters.
+4. Improved tokenizer support for configurable Smarty delimiters.
+5. Refactored block tag matching to use a stack-based implementation and reset parser state per file.
+6. Fixed invalid token pointer warnings reported by SmartyLint.
+
+=========================================================================
+
 v 0.3.1 (Wed, 22 Apr 2026):-
 
 1. Fixed undefined array key "start" warnings in comment rules when processing multiline comments.
