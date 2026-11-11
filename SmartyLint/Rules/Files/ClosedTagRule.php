@@ -42,7 +42,7 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
 
         $leftDelimiter = preg_quote($smartylFile->lDelimiter, '/');
         $rightDelimiter = preg_quote($smartylFile->rDelimiter, '/');
-        $pattern = '/' . $leftDelimiter . '([^\s]+?)(?=\s|' . $rightDelimiter . ')/';
+        $pattern = '/' . $leftDelimiter . '(?=([^\s]+?)(?:\s|' . $rightDelimiter . '))/';
 
         if (preg_match_all($pattern, $content, $matches)) {
             foreach ($matches[1] as $tag) {
@@ -85,14 +85,16 @@ class Rules_Files_ClosedTagRule implements SmartyLint_Rule {
                 continue;
             }
 
-            $lastOpenTag = end($openTagStack);
-            if ($lastOpenTag['tag'] === $tag) {
-                array_pop($openTagStack);
-                continue;
-            }
+            while (! empty($openTagStack)) {
+                $lastOpenTag = end($openTagStack);
+                if ($lastOpenTag['tag'] === $tag) {
+                    array_pop($openTagStack);
+                    break;
+                }
 
-            $smartylFile->addError("Tag {$lastOpenTag['tag']} is not closed.", $lastOpenTag['stackPtr'], 'TagNotClosed');
-            array_pop($openTagStack);
+                $smartylFile->addError("Tag {$lastOpenTag['tag']} is not closed.", $lastOpenTag['stackPtr'], 'TagNotClosed');
+                array_pop($openTagStack);
+            }
         }
 
         foreach ($openTagStack as $openTag) {
